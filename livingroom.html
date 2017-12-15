@@ -31,12 +31,13 @@
     <div class="video-wrapper">
         <div class="living-top">
             <div class="avatar fl">
-                <img src="images/hom-hea-1.png" alt="">
+                <img src=" " alt="">
             </div>
             <div class="living-info">
                 <h2><span class="tit">任务：对H高低进行目标活动侦查！</span><span class="living-label">直播中</span></h2>
-                <div class="ib"><span class="nickname">侦查3班</span><span class="living-roomid">房间00001</span><span
-                        class="stars"><span class="flh"><i class="layui-icon">&#xe600;</i>关注</span><span class="followers">0</span></span>
+                <div class="ib"><span class="nickname"></span><span class="living-roomid">房间00001</span><span
+                        class="stars"><span class="flh"><i class="layui-icon">&#xe600;</i>关注</span><span
+                        class="followers">0</span></span>
                     <div class="ctrl fr">
                         <span id="refresh"><i class="layui-icon">&#x1002;</i>重新加载</span>
                         <span><i class="layui-icon">&#xe64a;</i>抓屏</span>
@@ -54,10 +55,10 @@
     </div>
     <div class="right-wrapper">
         <div class="add-wrapper">
-            <div class="add-item"></div>
-            <div class="add-item"></div>
-            <div class="add-item"></div>
-            <div class="add-item"></div>
+            <div class="add-item default" id="add-w1"></div>
+            <div class="add-item default" id="add-w2"></div>
+            <div class="add-item default" id="add-w3"></div>
+            <div class="add-item default" id="add-w4"></div>
         </div>
         <div class="discuss-wrapper">
             <div class="discuss-msglist">
@@ -86,7 +87,7 @@
     <script src="js/common.js"></script>
     <script type="text/javascript" src="player/ckplayer/ckplayer.js" charset="utf-8"></script>
     <script>
-//                var videoUrl = "http://27046.live-vod.cdn.aodianyun.com/m3u8/0x0/merge/f7d7a7dc4fc8f1b194bd9c195cf01de1.m3u8";
+        //                var videoUrl = "http://27046.live-vod.cdn.aodianyun.com/m3u8/0x0/merge/f7d7a7dc4fc8f1b194bd9c195cf01de1.m3u8";
         ////        var videoUrl = "http://27046.long-vod.cdn.aodianyun.com/u/27046/mp4/0x0/054be91836c21e0dab16be625bc1be62.mp4";
         ////        liveinfo/get/info/
         //        if(ext(videoUrl) == '.mp4'){
@@ -113,28 +114,28 @@
         //        }
 
 
-//        else {
-//            if (ext(xtAPI.liveInfo["m3u8"]) == '.m3u8') {
-//                var flashvars = {
-//                    a: xtAPI.liveInfo["m3u8"],
-//                    f: 'player/m3u8.swf',
-//                    c: 0,
-//                    s: 4
-//                };
-//                var video = [xtAPI.liveInfo["m3u8"]];
-//                var params = {
-//                    bgcolor: '#FFF',
-//                    allowFullScreen: true,
-//                    allowScriptAccess: 'always',
-//                    wmode: 'transparent'
-//                };
-//                CKobject.embed('player/ckplayer/ckplayer.swf', 'live-video', 'ckplayer_a1', '100%', '100%', false, flashvars, video, params);
-//
-//            } else {
-//                $("#live-video").html("<video src='" + xtAPI.liveInfo["m3u8"] + "' width='100%' height='100%' controls='true'></video>")
-//
-//            }
-//        }
+        //        else {
+        //            if (ext(xtAPI.liveInfo["m3u8"]) == '.m3u8') {
+        //                var flashvars = {
+        //                    a: xtAPI.liveInfo["m3u8"],
+        //                    f: 'player/m3u8.swf',
+        //                    c: 0,
+        //                    s: 4
+        //                };
+        //                var video = [xtAPI.liveInfo["m3u8"]];
+        //                var params = {
+        //                    bgcolor: '#FFF',
+        //                    allowFullScreen: true,
+        //                    allowScriptAccess: 'always',
+        //                    wmode: 'transparent'
+        //                };
+        //                CKobject.embed('player/ckplayer/ckplayer.swf', 'live-video', 'ckplayer_a1', '100%', '100%', false, flashvars, video, params);
+        //
+        //            } else {
+        //                $("#live-video").html("<video src='" + xtAPI.liveInfo["m3u8"] + "' width='100%' height='100%' controls='true'></video>")
+        //
+        //            }
+        //        }
 
         $("#refresh").click(function () {
             window.location.href = window.location.href;
@@ -143,50 +144,110 @@
         layui.use(['layer', 'element'], function () {
             var layer = layui.layer
                 , element = layui.element;
-                var request = getRequest();
+            var request = getRequest();
 //                var videoUrl = 'rtmp://27046.lssplay.aodianyun.com/newlive2016/f3204e51d8b0456988d561227483c938';
 
-                    $.post(commonUrl + 'liveinfo/get/info/' + request["id"],{}, function (data) {
-                        if(data.success){
-                            var data = data.data;
-                            var flashvars = {
-                                f: data.lssplayUrl,
-                                c: 0,
-                                b: 1,
-                                p: 1,
-                                lv: 1
-                            };
-                            var params = {bgcolor: '#FFF', allowFullScreen: true, allowScriptAccess: 'always', wmode: 'transparent'};
-                            CKobject.embedSWF('player/ckplayer/ckplayer.swf', 'player', 'ckplayer_a1', '100%', '100%', flashvars, params);
-                            $(".living-top .tit").text(data.title);
-                            $(".followers").text(data.follownum);
-                            $(".living-roomid").text('房间' + data.roomId);
-                        }else{
-                           layer.msg(data.msg);
-                        }
-                    }, 'json')
-//            $(".add-item").onclick(function () {
+            $.post(commonUrl + 'liveinfo/get/info/' + request["id"], {}, function (data) {
+                if (data.success) {
+                    var data = data.data;
+                    var branchId = data.branchId;
+                    var flashvars = {
+                        f: data.lssplayUrl,
+                        c: 0,
+                        b: 1,
+                        p: 1,
+                        lv: 1
+                    };
+                    var params = {
+                        bgcolor: '#FFF',
+                        allowFullScreen: true,
+                        allowScriptAccess: 'always',
+                        wmode: 'transparent'
+                    };
+                    CKobject.embedSWF('player/ckplayer/ckplayer.swf', 'player', 'ckplayer_a1', '100%', '100%', flashvars, params);
+                    $(".living-top .tit").text(data.title);
+                    $(".followers").text(data.follownum);
+                    $(".living-roomid").text('房间' + data.roomId);
+                    $(".ib .nickname").text(data.nickname);
+                    $(".living-top .avatar img").attr("src", data.headImg);
 
-//                $.post('liveinfo/get/info/' + request["id"], {}, function(str){
-//                    layer.open({
-//                        area: ['600px','400px'],
-//                        content: '确定要删除吗？'
-//                        ,btn: ['确定']
-//                        ,yes: function(index, layero){
-//                            //按钮【按钮一】的回调
-//
-//                        }
-//                        ,cancel: function(){
-//                            //右上角关闭回调
-//
-//                            //return false 开启该代码可禁止点击该按钮关闭
-//                        }
-//                    });
-//                })
-//
-//
-//            })
+                    $(".add-item.default").click(function () {
+                        var _this = $(this);
+                        $.post(commonUrl + 'search/search', {
+                            startNum: 0,
+                            perNum: 0, branchId: branchId, hasChildren: true,
+                            openLive: true, types: 1
+                        }, function (data) {
+                            var htmlbody = '';
+                            var datalist = data.data["liveinfo"]["list"];
+                            if (datalist.length > 0) {
+                                datalist.forEach(function (element) {
+                                    htmlbody += '<div class="video-item" onclick="choose(this)" data-id="' + element.id + '">\n' +
+                                        '                            <div class="cover" style="background-image: url(' + element.coverImg + ')">\n' +
+                                        '                            </div>\n' +
+                                        '                            <div class="bt">\n' +
+                                        '                                <img src="' + element.headImg + '" class="avatar" alt="">\n' +
+                                        '                                <div class="des fl">\n' +
+                                        '                                    <div class="tit">' + element.title + '</div>\n' +
+                                        '                                    <p class="location">' + element.bewrite + '</p>\n' +
+                                        '                                </div>\n' +
+                                        '                            </div>\n' +
+                                        '                        </div>';
+                                })
+                            }
+
+                            layer.open({
+                                title: '视频选择',
+                                area: ['600px', '400px'],
+                                content: htmlbody
+                                , btn: ['确定']
+                                , yes: function (index, layero) {
+                                    //按钮【按钮一】的回调
+                                    var livingid = $(".video-item.choosed").attr("data-id");
+                                    $.post(commonUrl + 'liveinfo/get/info/' + livingid, {}, function (data) {
+                                        if (data.success) {
+                                            var data = data.data;
+                                            var branchId = data.branchId;
+                                            var flashvars = {
+                                                f: data.lssplayUrl,
+                                                c: 0,
+                                                b: 1,
+                                                p: 1,
+                                                lv: 1
+                                            };
+                                            var params = {
+                                                bgcolor: '#FFF',
+                                                allowFullScreen: true,
+                                                allowScriptAccess: 'always',
+                                                wmode: 'transparent'
+                                            };
+                                            CKobject.embedSWF('player/ckplayer/ckplayer.swf', _this.attr("id"), 'ckplayer_a1', '100%', '100%', flashvars, params);
+                                            layer.close(index)
+                                            _this.removeClass('default')
+                                        }
+                                    }, 'json')
+
+                                }
+                                , cancel: function () {
+                                    //右上角关闭回调
+
+                                    //return false 开启该代码可禁止点击该按钮关闭
+                                }
+                            });
+                        })
+                    })
+
+                } else {
+                    layer.msg(data.msg);
+                }
+            }, 'json')
+
         });
+
+        function choose(obj) {
+            $(".video-item.choosed").removeClass("choosed");
+            $(obj).addClass("choosed");
+        }
     </script>
 </body>
 </html>

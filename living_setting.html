@@ -100,13 +100,18 @@
 <script>
     layui.use(['upload','form'], function(){
         var upload = layui.upload;
-
+        var diyCoverImg = null;
         //执行实例
         var uploadInst = upload.render({
             elem: '.btn-change-cover' //绑定元素
-//            ,url: '/upload/' //上传接口
+            ,field: 'files'
+            ,url: commonUrl + '/uploadFile' //上传接口
+            ,data: {
+                filetype: 2
+            }
             , done: function (res) {
                 //上传完毕回调
+                diyCoverImg = res.data.list[0];
             }
             , error: function () {
                 //请求异常回调
@@ -129,6 +134,9 @@
         $(".intoliving").click(function(){
             var formdata = $("#settingform").serializeArray();
             var postdata = {};
+            if( diyCoverImg !== null){
+                postdata["diyCoverImg"] = diyCoverImg;
+            }
             $.each(formdata,
                 function (i) {
                     postdata[formdata[i]["name"]] = formdata[i]["value"];

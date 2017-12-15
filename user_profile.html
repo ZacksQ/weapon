@@ -122,8 +122,16 @@
         //执行实例
         var uploadInst = upload.render({
             elem: '.btn-change-avatar' //绑定元素
-//            ,url: '/upload/' //上传接口
+            ,url: commonUrl + '/uploadFile' //上传接口
+            ,field: 'files'
+            ,data: {
+                filetype: 1
+            }
             ,done: function(res){
+                var avatar = commonUrl + res.data.list[0];
+                $.post(commonUrl + 'user/set/info', {headImg: res.data.list[0]}, function () {
+                    $(".avatar img").attr("src", avatar)
+                }, 'json')
                 //上传完毕回调
             }
             ,error: function(){

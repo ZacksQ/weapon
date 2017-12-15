@@ -16,7 +16,7 @@ $.post(commonUrl + 'user/get/info', {}, function (data) {
         $(".user-nav .nickname").text(userinfo.nickname);
         $(".user-data .nickname span").text(userinfo.nickname);
         $(".user-introduction").text(userinfo.mood);
-        $(".avatar").attr("src", userinfo.headImg);
+        $(".avatar img").attr("src", userinfo.headImg);
         var classtype = userinfo.branchName.reverse();
         $('.class-type').html(classtype.join('<i class="layui-icon">&#xe623;</i>'));
     }

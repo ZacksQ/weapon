@@ -347,6 +347,9 @@ html, body {
     overflow: hidden;
     margin: 0 auto 10px;
 }
+.user-info .avatar img{
+    width:100%;
+}
 
 .user-info .nickname {
     font-size: 20px;
@@ -505,14 +508,23 @@ html, body {
 .ancthor .nickname{color: #42B367 }
 .msg-item{ margin-bottom: 15px;}
 .ancthor .nickname:before{
-    content: 'ä¸»æ’­'; display: inline-block; color: #fff;background: #94e8a3; /* Old browsers */
+    content: 'anchor'; display: inline-block; color: #fff;background: #94e8a3; /* Old browsers */
     background: -moz-linear-gradient(left, #94e8a3 0%, #058c3c 100%); /* FF3.6-15 */
     background: -webkit-linear-gradient(left, #94e8a3 0%,#058c3c 100%); /* Chrome10-25,Safari5.1-6 */
     background: linear-gradient(to right, #94e8a3 0%,#058c3c 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#94e8a3', endColorstr='#058c3c',GradientType=1 ); /* IE6-9 */ padding: 0 4px; margin-right: 5px;}
-#msg-input{ border: 1px solid #bfbfbf; background-color: #232323; line-height: 30px;
-    height:30px; margin-right: 10px; border-radius: 2px; vertical-align: bottom; width: 80%;
-    color:#fff; padding: 0 5px}
+#msg-input{
+    border: 1px solid #bfbfbf;
+    background-color: #232323;
+    line-height: 30px;
+    height:30px;
+    /* margin-right: 10px; */
+    border-radius: 2px;
+    vertical-align: bottom;
+    width: 80%;
+    color:#fff;
+    padding: 0 5px;
+    }
 .paging{ text-align: center}
 .living-room .discuss-wrapper{background-color: #F0F0F0;color: #000;}
 .living-room #msg-input{ background-color: #F0F0F0}
@@ -527,18 +539,21 @@ html, body {
     padding: 5px 0;
     }
 .add-wrapper .add-item{
-    background-color: #F0F0F0; width: 48%;
-    height:48%; position: relative;
-    cursor: pointer;}
+    background-color: #F0F0F0;
+    width: 48%;
+    height:48%;
+    position: relative;
+    cursor: pointer;
+    }
 
-.add-wrapper .add-item:before{
+.add-wrapper .add-item.default:before{
     width: 5px; height: 50px; content: ''; margin: auto;
     position: absolute; background-color: #fff;
     top:0; right: 0;
     left:0;
     bottom:0;
 }
-.add-wrapper .add-item:after{
+.add-wrapper .add-item.default:after{
     width: 50px; height: 5px; content: ''; margin: auto;
     position: absolute; background-color: #fff;
     top:0; right: 0;
@@ -546,3 +561,5 @@ html, body {
     bottom:0;
 }
 .living-top .tit{ margin-right: 10px;}
+.layui-layer-content .video-item{ padding: 10px 0; border-bottom: 1px solid #f0f0f0; cursor:pointer;}
+.layui-layer-content .video-item:hover,.layui-layer-content .video-item.choosed{ background-color:#f0f0f0}
