@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>录制视频</title>
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+<div class="top">
+    <h1>视频直播平台</h1>
+    <div class="user-nav fr">
+        <div class="avatar">
+            <img src="images/hom-hea-1.png" alt="">
+        </div>
+        <span class="nickname"></span>
+        <span class="dropdown-caret"></span>
+        <div class="dropdown-menu">
+            <ul>
+                <li><a href="user_profile.html">我的信息</a></li>
+                <li><a href="my_shortcut.html">我的截图</a></li>
+                <li><a href="my_record.html">录制视频</a></li>
+                <li><a href="living_setting.html">直播设置</a></li>
+                <li><a href="javascript:;">退出</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="ind-container">
+    <div class="classlist-wrapper">
+        <div class="tit">个人中心</div>
+        <ul class="uc-nav">
+            <li><a href="user_profile.html"><i class="layui-icon">&#xe68e;</i>我的信息</a></li>
+            <li><a href="my_shortcut.html"><i class="layui-icon">&#xe60d;</i>我的截图</a></li>
+            <li><a href="my_record.html"><i class="layui-icon">&#xe6ed;</i>录制视频</a></li>
+            <li><a href="living_setting.html" class="current"><i class="layui-icon">&#xe620;</i>直播设置</a></li>
+        </ul>
+    </div>
+    <div class="main">
+        <form class="layui-form" id="settingform" action="">
+        <table class="setting-table">
+            <tr>
+                <td width="10%">房间id：</td>
+                <td width="40%" id="roomid"></td>
+                <td width="10%">分辨率：</td>
+                <td width="40%"><div class="layui-form-item">
+                    <input type="radio" name="resolution" value="1" title="960*540">
+                    <input type="radio" name="resolution" value="2" title="1280*720（推荐）"checked>
+                    <input type="radio" name="resolution" value="3" title="1920*1080">
+              </div></td>
+            </tr>
+            <tr>
+                <td width="10%">房间标题：</td>
+                <td width="40%"><input type="text" name="title" required lay-verify="required" class="layui-input"></td>
+                <td width="10%">帧数：</td>
+                <td width="40%"><div class="layui-form-item">
+                    <!--<input type="radio" name="fps" value="1" title="30fps">-->
+                    <!--<input type="radio" name="fps" value="2" title="60fps" checked>-->
+                    <input type="number" name="fpsNum" required lay-verify="number" placeholder="1fps-60fps" class="layui-input">
+                </div></td>
+            </tr>
+            <tr>
+                <td width="10%">房间描述：</td>
+                <td width="40%">
+                    <textarea id="" cols="30" class="layui-textarea" name="bewrite" rows="10"></textarea>
+                </td>
+                <td width="10%">码率：</td>
+                <td width="40%"><div class="layui-form-item">
+                    <input type="number" name="codeRate" required lay-verify="number" class="layui-input">
+                </div></td>
+            </tr>
+            <tr>
+                <td width="10%">房间封面：</td>
+                <td width="40%">
+                    <input type="radio" name="diycover" value="1" title="使用直播画面作为封面" checked><br/>
+                    <input type="radio" name="diycover" value="2" title="使用自定义封面" >
+                    <button type="button" class="layui-btn layui-btn-normal layui-btn-xs btn-change-cover">上传封面</button>
+                </td>
+                <td width="10%">画质：</td>
+                <td width="40%"><div class="layui-form-item">
+                    <input type="radio" name="pictureQuality" value="1" title="高(CPU消耗高)">
+                    <input type="radio" name="pictureQuality" value="2" title="中" checked>
+                    <input type="radio" name="pictureQuality" value="3" title="低" >
+                </div></td>
+            </tr>
+            <tr>
+                <td width="10%"></td>
+                <td width="40%"></td>
+                <td width="10%"></td>
+                <td width="40%"><button type="submit" class="layui-btn layui-btn-normal fr intoliving">进入直播房间</button></td>
+            </tr>
+        </table>
+        </form>
+    </div>
+    <div class="layui-clear"></div>
+</div>
+<script src="js/jquery.min.js"></script>
+<script src="layui/layui.js"></script>
+<script src="js/common.js"></script>
+<script>
+    layui.use(['upload','form'], function(){
+        var upload = layui.upload;
+
+        //执行实例
+        var uploadInst = upload.render({
+            elem: '.btn-change-cover' //绑定元素
+//            ,url: '/upload/' //上传接口
+            , done: function (res) {
+                //上传完毕回调
+            }
+            , error: function () {
+                //请求异常回调
+            }
+        });
+
+        $.post(commonUrl + 'liveinfo/get/intercalate', {}, function (data) {
+            if (data.success) {
+                var setting = data.data;
+                $("#settingform input[name=title]").val(setting.title);
+                $("#settingform input[name=fpsNum]").val(setting.fpsNum);
+                $("#settingform input[name=codeRate]").val(setting.codeRate);
+                $("#settingform textarea[name=bewrite]").text(setting.bewrite);
+                $("#roomid").text(setting.roomId);
+            } else {
+                layer.msg(data.msg);
+            }
+        }, 'json');
+
+        $(".intoliving").click(function(){
+            var formdata = $("#settingform").serializeArray();
+            var postdata = {};
+            $.each(formdata,
+                function (i) {
+                    postdata[formdata[i]["name"]] = formdata[i]["value"];
+                })
+            $.post(commonUrl + 'liveinfo/set/intercalate', postdata, function (data) {
+                if (data.success) {
+                    window.location.href="anchor_living.html";
+
+                } else {
+                    layer.msg(data.msg);
+                }
+            }, 'json');
+            return false;
+        })
+    });
+</script>
+</body>
+</html>

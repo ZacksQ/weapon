@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>登录 - 视频直播</title>
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <link rel="stylesheet" href="css/main.css">
+
+</head>
+<body class="login">
+<div class="login-wrapper">
+    <div class="tit">
+        <img src="images/login_logo.png" alt="" class="icon">视频直播
+    </div>
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <div class="layui-show">
+                <input type="text" name="username" required lay-verify="required" placeholder="用户名" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-show">
+                <input type="password" name="pwd" required lay-verify="required" placeholder="密码" autocomplete="off"
+                       class="layui-input ">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-show">
+                <button class="layui-btn layui-btn-normal layui-btn-lg layui-col-lg12" lay-submit lay-filter="login">
+                    登录
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="js/jquery.min.js"></script>
+<script src="js/common.js"></script>
+<script src="layui/layui.js"></script>
+<script>
+    layui.use(['layer', 'form'], function () {
+        var layer = layui.layer
+            , form = layui.form;
+        form.on('submit(login)', function (data) {
+            var postdata = data["field"];
+//            console.log(postdata)
+            $.post(commonUrl + 'signIn', postdata, function (data) {
+                if (data.success === true) {
+                    window.location.href = 'index.html';
+                } else {
+                    layer.msg(data.msg)
+                }
+            }, 'json');
+            return false;
+        });
+    });
+
+
+</script>
+</body>
+</html>

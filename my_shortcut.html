@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>我的截图</title>
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+<div class="top">
+    <h1>视频直播平台</h1>
+    <div class="user-nav fr">
+        <div class="avatar">
+            <img src="images/hom-hea-1.png" alt="">
+        </div>
+        <span class="nickname"></span>
+        <span class="dropdown-caret"></span>
+        <div class="dropdown-menu">
+            <ul>
+                <li><a href="user_profile.html">我的信息</a></li>
+                <li><a href="my_shortcut.html">我的截图</a></li>
+                <li><a href="my_record.html">录制视频</a></li>
+                <li><a href="living_setting.html">直播设置</a></li>
+                <li><a href="javascript:;">退出</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="ind-container">
+    <div class="classlist-wrapper">
+        <div class="tit">个人中心</div>
+        <ul class="uc-nav">
+            <li><a href="user_profile.html"><i class="layui-icon">&#xe68e;</i>我的信息</a></li>
+            <li><a href="my_shortcut.html" class="current"><i class="layui-icon">&#xe60d;</i>我的截图</a></li>
+            <li><a href="my_record.html"><i class="layui-icon">&#xe6ed;</i>录制视频</a></li>
+            <li><a href="living_setting.html"><i class="layui-icon">&#xe620;</i>直播设置</a></li>
+        </ul>
+    </div>
+    <div class="main">
+        <div class="layui-tab-item layui-show">
+            <div class="shortcut-wrapper " id="shortcut-wrapper">
+                <!--<div class="shortcut-item">-->
+                    <!--<div class="shortcut-nav">-->
+                        <!--<i class="layui-icon scdropdown">&#xe61a;</i>-->
+                        <!--<ul class="sc-menu">-->
+                            <!--<li><a href="javascript:;"><i class="layui-icon">&#xe642;</i>编辑</a></li>-->
+                            <!--<li><a href="javascript:;"><i class="layui-icon">&#xe640;</i>删除</a></li>-->
+                        <!--</ul>-->
+                    <!--</div>-->
+                    <!--<div class="cover" style="background-image: url(images/sea-pho-1.png)">-->
+                    <!--</div>-->
+                    <!--<div class="tit"><span>射击</span><span class="date fr">2017-09-20</span></div>-->
+                <!--</div>-->
+
+            </div>
+
+        </div>
+    </div>
+    <div class="layui-clear"></div>
+</div>
+<script src="js/jquery.min.js"></script>
+<script src="layui/layui.js"></script>
+<script src="js/common.js"></script>
+<script>
+    function edit(id){
+        layer.open({
+            area: ['600px'],
+            content: '<form class="layui-form" id="editform" action="">\n' +
+            '  <div class="layui-form-item">\n' +
+            '    <label class="layui-form-label">标题</label>\n' +
+            '    <div class="layui-input-block">\n' +
+            '      <input type="text" name="title" required  lay-verify="required" value="' + $(".shortcut-item[data-id=" + id + "] .tit .t").text() + '" autocomplete="off" class="layui-input">\n' +
+            '    </div>\n' +
+            '  </div>' +
+            '</form>'
+            ,btn: ['保存']
+            ,yes: function(index, layero){
+                //按钮【按钮一】的回调
+                var formdata = $("#editform").serializeArray();
+                var postdata = {id: id};
+                $.each(formdata,
+                    function (i) {
+                        postdata[formdata[i]["name"]] = formdata[i]["value"];
+                    })
+                $.post(commonUrl + 'picture/update', postdata, function (data) {
+                    if (data.success) {
+                        $(".shortcut-item[data-id=" + id + "] .tit .t").text(postdata.title)
+                        layer.close(index)
+//                            var classtype = userinfo.branchName.reverse();
+//                            $('.class-type').html(classtype.join('<i class="layui-icon">&#xe623;</i>'));
+                    } else {
+                        layer.msg(data.msg);
+                    }
+
+                }, 'json');
+            }
+            ,cancel: function(){
+                //右上角关闭回调
+
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+        });
+    }
+
+    function del(id){
+        layer.open({
+            area: ['300px'],
+            content: '确定要删除吗？'
+            ,btn: ['确定']
+            ,yes: function(index, layero){
+                //按钮【按钮一】的回调
+                var postdata = {id: id};
+
+                $.post(commonUrl + 'picture/remove', postdata, function (data) {
+                    if (data.success) {
+                        $(".shortcut-item[data-id=" + id + "]").remove();
+                        layer.close(index)
+                    } else {
+                        layer.msg(data.msg);
+                    }
+                }, 'json');
+            }
+            ,cancel: function(){
+                //右上角关闭回调
+
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+        });
+    }
+
+    layui.use(['layer', 'element', 'laypage'], function () {
+        var layer = layui.layer
+            , form = layui.form;
+
+        getlist(0, 12);
+
+        function getlist(startNum, perNum) {
+            var eleobj = {
+                wrapper: 'shortcut-wrapper',
+                paging: 'shortcutpaging'
+            }
+            $("#" + eleobj.wrapper).html('<div class="layui-clear"></div>\n' +
+                '                        <div id="' + eleobj.paging + '" class="paging"></div>');
+//            perNum = 1
+            $.post(commonUrl + 'picture/list', {
+                startNum: startNum,
+                perNum: perNum
+            }, function (data) {
+                if (data.success) {
+                    var datalist = data.data["list"];
+                    if (datalist.length > 0) {
+                        datalist.forEach(function (element) {
+                            $("#" + eleobj.wrapper).prepend('<div class="shortcut-item" data-id="' + element.id + '">\n' +
+                                '                    <div class="shortcut-nav">\n' +
+                                '                        <i class="layui-icon scdropdown">&#xe61a;</i>\n' +
+                                '                        <ul class="sc-menu">\n' +
+                                '                            <li><a href="javascript:;" onclick="edit(\'' + element.id + '\')"><i class="layui-icon">&#xe642;</i>编辑</a></li>\n' +
+                                '                            <li><a href="javascript:;" onclick="del(\'' + element.id + '\')"><i class="layui-icon">&#xe640;</i>删除</a></li>\n' +
+                                '                        </ul>\n' +
+                                '                    </div>\n' +
+                                '                    <div class="cover" style="background-image: url(' + element.url + ')">\n' +
+                                '                    </div>\n' +
+                                '                    <div class="tit"><span class="t">' + element.title + '</span><span class="date fr">' + element.createDate + '</span></div>\n' +
+                                '                </div>');
+                        })
+
+                        var laypage = layui.laypage;
+
+                        //执行一个laypage实例
+                        laypage.render({
+                            elem: eleobj.paging //注意，这里的 test1 是 ID，不用加 # 号
+                            , limit: perNum
+                            , count: data.data.count //数据总数，从服务端得到
+                            , theme: '#1E9FFF'
+                            , curr: Math.floor(startNum / perNum) + 1
+                            , jump: function (obj, first) {
+                                //obj包含了当前分页的所有参数，比如：
+
+                                //首次不执行
+                                if (!first) {
+                                    //do something
+                                    getlist((obj.curr - 1) * perNum, perNum)
+                                }
+                            }
+                        });
+                    }else{
+                        $("#" + eleobj.wrapper).html("暂无数据")
+                    }
+                } else {
+                    layer.msg(data.msg);
+                }
+            }, 'json');
+        }
+    });
+
+</script>
+</body>
+</html>

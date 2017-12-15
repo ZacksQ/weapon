@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>视频直播</title>
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+<div class="top">
+    <h1>视频直播平台</h1>
+    <div class="user-nav fr">
+        <div class="avatar">
+            <img src="images/hom-hea-1.png" alt="">
+        </div>
+        <span>花神科技园</span>
+        <span class="dropdown-caret"></span>
+        <div class="dropdown-menu">
+            <ul>
+                <li><a href="user_profile.html">我的信息</a></li>
+                <li><a href="my_shortcut.html">我的截图</a></li>
+                <li><a href="my_record.html">录制视频</a></li>
+                <li><a href="living_setting.html">直播设置</a></li>
+                <li><a href="javascript:;">退出</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="ind-container">
+    <div class="classlist-wrapper">
+        <div class="tit">编制分类</div>
+        <ul id="classlist"></ul>
+    </div>
+    <div class="main">
+        <div class="search-box">
+            <input type="text" class="search-input" name="search">
+            <button type="button" class="layui-btn layui-btn-normal search-btn">
+                <img src="images/search.png" alt="">搜索
+            </button>
+        </div>
+        <div class="layui-tab layui-tab-card">
+            <ul class="layui-tab-title">
+                <li class="layui-this">所有直播</li>
+                <li>视频</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <div class="ind-video-wrapper" id="living-wrapper">
+                        <!--<a href="" class="video-item">-->
+                        <!--<div class="cover" style="background-image: url(images/sea-pho-1.png)">-->
+                        <!--&lt;!&ndash;<img src="images/sea-pho-1.png" alt="">&ndash;&gt;-->
+                        <!--</div>-->
+                        <!--<div class="bt">-->
+                        <!--&lt;!&ndash;<div class="avatar">&ndash;&gt;-->
+                        <!--<img src="images/hom-hea-1.png" class="avatar fl" alt="">-->
+                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                        <!--<div class="des fl">-->
+                        <!--<div class="tit">侦查1班</div>-->
+                        <!--<p class="location">位置：N33°16′54.57″</p>-->
+                        <!--<p class="mission">任务：勘测9点钟方向3公里行动情况″</p>-->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <!--</a>-->
+
+                        <!--<div class="layui-clear"></div>-->
+                        <!--<div id="videopage" class="paging"></div>-->
+                    </div>
+
+                </div>
+                <div class="layui-tab-item">
+                    <div class="ind-video-wrapper" id="vod-wrapper">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-clear"></div>
+</div>
+<script src="js/jquery.min.js"></script>
+<script src="layui/layui.js"></script>
+<script src="js/common.js"></script>
+<script>
+    layui.use(['layer', 'tree', 'element', 'laypage'], function () {
+        var layer = layui.layer
+            , form = layui.form
+            , element = layui.element;
+
+        $.post(commonUrl + 'branch/list', {}, function (data) {
+            if (data.success) {
+                var treedata = data.data.list;
+                layui.tree({
+                    elem: "#classlist"
+                    , nodes: treedata
+                    , click: function (node) {
+//                        console.log(node)
+                        getlist(0, 8, 1, node.id);
+                        getlist(0, 8, 2, node.id);
+                    }
+                })
+            } else {
+                layer.msg(data.msg);
+            }
+
+        }, 'json');
+
+        getlist(0, 8, 1);
+        getlist(0, 8, 2);
+
+        function getlist(startNum, perNum, type, branchId, searchWord) {
+            var eleobj = {
+                wrapper: '',
+                paging: '',
+                name: '',
+                url: ''
+            };
+
+            switch (type) {
+                case 1:
+                    eleobj.wrapper = 'living-wrapper';
+                    eleobj.paging = 'videopage';
+                    eleobj.name = 'liveinfo';
+                    eleobj.url = 'livingroom.html';
+                    break;
+                case 2:
+                    eleobj.wrapper = 'vod-wrapper';
+                    eleobj.paging = 'vodpage';
+                    eleobj.name = 'video';
+                    eleobj.url = 'javascript:;';
+                    break;
+            }
+            $("#" + eleobj.wrapper).html('<div class="layui-clear"></div>\n' +
+                '                        <div id="' + eleobj.paging + '" class="paging"></div>');
+//            perNum = 1
+            $.post(commonUrl + 'search/search', {
+                types: type,
+                startNum: startNum,
+                perNum: perNum,
+                branchId: branchId,
+                hasChildren: true,
+                openLive: true,
+                searchWord: searchWord
+            }, function (data) {
+                if (data.success) {
+                    var datalist = data.data[eleobj.name]["list"];
+                    if (datalist.length > 0) {
+                        datalist.forEach(function (element) {
+                            $("#" + eleobj.wrapper).prepend('<a href="' + eleobj.url + '?id=' + element.id +'&branchId=' + element. +'" class="video-item">\n' +
+                                '                            <div class="cover" style="background-image: url(' + element.coverImg + ')">\n' +
+                                '                            </div>\n' +
+                                '                            <div class="bt">\n' +
+                                '                                <img src="' + element.headImg + '" class="avatar" alt="">\n' +
+                                '                                <div class="des fl">\n' +
+                                '                                    <div class="tit">' + element.title + '</div>\n' +
+                                '                                    <p class="location">' + element.bewrite + '</p>\n' +
+                                '                                </div>\n' +
+                                '                            </div>\n' +
+                                '                        </a>');
+                        })
+
+                        var laypage = layui.laypage;
+
+                        //执行一个laypage实例
+                        laypage.render({
+                            elem: eleobj.paging //注意，这里的 test1 是 ID，不用加 # 号
+                            , limit: perNum
+                            , count: data.data[eleobj.name].count //数据总数，从服务端得到
+                            , theme: '#1E9FFF'
+                            , curr: Math.floor(startNum / perNum) + 1
+                            , jump: function (obj, first) {
+                                //obj包含了当前分页的所有参数，比如：
+                                //console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
+                                //console.log(obj.limit); //得到每页显示的条数
+
+                                //首次不执行
+                                if (!first) {
+                                    //do something
+                                    getlist((obj.curr - 1) * perNum, perNum, type)
+                                }
+                            }
+                        });
+                    }else{
+                        $("#" + eleobj.wrapper).html("暂无数据")
+                    }
+                } else {
+                    layer.msg(data.msg);
+                }
+            }, 'json');
+        }
+
+
+        $(".search-btn").click(function () {
+            var searchWord = $("input[name=search]").val();
+            getlist(0, 8, 1, null, searchWord);
+            getlist(0, 8, 2, null, searchWord);
+        })
+    });
+
+</script>
+</body>
+</html>
