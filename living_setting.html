@@ -8,7 +8,7 @@
 </head>
 <body>
 <div class="top">
-    <h1>视频直播平台</h1>
+    <h1><a href="index.html">视频直播平台</a></h1>
     <div class="user-nav fr">
         <div class="avatar">
             <img src="images/hom-hea-1.png" alt="">
@@ -21,7 +21,7 @@
                 <li><a href="my_shortcut.html">我的截图</a></li>
                 <li><a href="my_record.html">录制视频</a></li>
                 <li><a href="living_setting.html">直播设置</a></li>
-                <li><a href="javascript:;">退出</a></li>
+                <li><a href="javascript:;" id="loginout">退出</a></li>
             </ul>
         </div>
     </div>
@@ -101,6 +101,9 @@
     layui.use(['upload','form'], function(){
         var upload = layui.upload;
         var diyCoverImg = null;
+
+
+
         //执行实例
         var uploadInst = upload.render({
             elem: '.btn-change-cover' //绑定元素
@@ -140,7 +143,7 @@
             $.each(formdata,
                 function (i) {
                     postdata[formdata[i]["name"]] = formdata[i]["value"];
-                })
+                });
             $.post(commonUrl + 'liveinfo/set/intercalate', postdata, function (data) {
                 if (data.success) {
                     window.location.href="anchor_living.html";

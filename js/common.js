@@ -1,4 +1,4 @@
-var commonUrl = 'http://123.206.221.228:8080/jungong/'
+var commonUrl = 'http://123.206.221.228:8080/jungong/';
 
 $(".dropdown-caret").on("click", function () {
     $(".dropdown-menu").toggle()
@@ -10,17 +10,21 @@ $(document).on("click", function () {
     $(".dropdown-menu").hide()
 })
 
-$.post(commonUrl + 'user/get/info', {}, function (data) {
-    if (data.success) {
-        var userinfo = data.data;
-        $(".user-nav .nickname").text(userinfo.nickname);
-        $(".user-data .nickname span").text(userinfo.nickname);
-        $(".user-introduction").text(userinfo.mood);
-        $(".avatar img").attr("src", userinfo.headImg);
-        var classtype = userinfo.branchName.reverse();
-        $('.class-type').html(classtype.join('<i class="layui-icon">&#xe623;</i>'));
-    }
-}, 'json');
+if(window.location.href.indexOf('login') == -1){
+    $.post(commonUrl + 'user/get/info', {}, function (data) {
+        if (data.success) {
+            var userinfo = data.data;
+            $(".user-nav .nickname").text(userinfo.nickname);
+            $(".user-data .nickname span").text(userinfo.nickname);
+            $(".user-introduction").text(userinfo.mood);
+            $(".avatar img").attr("src", userinfo.headImg);
+            var classtype = userinfo.branchName.reverse();
+            $('.class-type').html(classtype.join('<i class="layui-icon">&#xe623;</i>'));
+        }else if(data.code == 1801){
+            window.location.href = 'login.html';
+        }
+    }, 'json');
+}
 
 function ext(filename){
     if(filename == null){ return false }
@@ -45,3 +49,18 @@ function getRequest() {
     }
     return theRequest;
 }
+
+// $(document).ajaxComplete(function (event, xhr, settings) {
+//     var sessionStatus = xhr.getResponseHeader("sessionstatus");
+//     if (typeof (sessionStatus) !== 'undefined' && sessionStatus != null) {
+//         if (sessionStatus === "timeout") {
+//             window.location.href = "login.html";
+//         }
+//     }
+// });
+
+$("#loginout").click(function () {
+    $.post(commonUrl + 'signOut', {}, function () {
+        window.location.href = 'login.html';
+    }, 'json');
+});

@@ -8,7 +8,7 @@
 </head>
 <body>
 <div class="top">
-    <h1>视频直播平台</h1>
+    <h1><a href="index.html">视频直播平台</a></h1>
     <div class="user-nav fr">
         <div class="avatar">
             <img src="images/hom-hea-1.png" alt="">
@@ -21,7 +21,7 @@
                 <li><a href="my_shortcut.html">我的截图</a></li>
                 <li><a href="my_record.html">录制视频</a></li>
                 <li><a href="living_setting.html">直播设置</a></li>
-                <li><a href="javascript:;">退出</a></li>
+                <li><a href="javascript:;" id="loginout">退出</a></li>
             </ul>
         </div>
     </div>
@@ -101,7 +101,6 @@
                             <!--</div>-->
                         <!--</a>-->
                         <!---->
-
                     </div>
                 </div>
             </div>
@@ -113,7 +112,7 @@
 <script src="layui/layui.js"></script>
 <script src="js/common.js"></script>
 <script>
-    layui.use(['layer', 'upload', 'element', 'laypage'], function () {
+    layui.use(['layer', 'upload', 'element', 'laypage', 'tree'], function () {
         var layer = layui.layer
             , form = layui.form
             , element = layui.element;
@@ -140,13 +139,21 @@
         });
 
         $(".user-edit").click(function () {
+            var branchId = null;
             layer.open({
-                area: ['600px'],
+                area: ['600px','500px'],
                 content: '<form class="layui-form" id="editform" action="">\n' +
                 '  <div class="layui-form-item">\n' +
                 '    <label class="layui-form-label">姓名</label>\n' +
                 '    <div class="layui-input-block">\n' +
                 '      <input type="text" name="nickname" required  lay-verify="required" value="' + $(".user-data .nickname span").text() + '" autocomplete="off" class="layui-input">\n' +
+                '    </div>\n' +
+                '  </div>' +
+                '  <div class="layui-form-item">\n' +
+                '    <label class="layui-form-label">类别</label>\n' +
+                '    <div class="layui-input-block">\n' +
+                '<div class="branchname">未选择</div>' +
+                '      <ul id="classlist"></ul>' +
                 '    </div>\n' +
                 '  </div>' +
                 '<div class="layui-form-item layui-form-text">\n' +
@@ -165,11 +172,23 @@
                         function (i) {
                             postdata[formdata[i]["name"]] = formdata[i]["value"];
                         })
+                    if(branchId != null){
+                        postdata["branchId"] = branchId
+                    }
                     $.post(commonUrl + 'user/set/info', postdata, function (data) {
                         if (data.success) {
                             $(".user-nav .nickname").text(postdata.nickname);
                             $(".user-data .nickname span").text(postdata.nickname);
                             $(".user-introduction").text(postdata.mood);
+
+                            $.post(commonUrl + 'user/get/info', {}, function (data) {
+                                if (data.success) {
+                                    var userinfo = data.data;
+                                    var classtype = userinfo.branchName.reverse();
+                                    $('.class-type').html(classtype.join('<i class="layui-icon">&#xe623;</i>'));
+                                }
+                            }, 'json');
+
                             layer.close(index)
 //                            var classtype = userinfo.branchName.reverse();
 //                            $('.class-type').html(classtype.join('<i class="layui-icon">&#xe623;</i>'));
@@ -185,6 +204,23 @@
                     //return false 开启该代码可禁止点击该按钮关闭
                 }
             });
+            $.post(commonUrl + 'branch/list', {}, function (data) {
+                if (data.success) {
+                    var treedata = data.data.list;
+                    layui.tree({
+                        elem: "#classlist"
+                        , nodes: treedata
+                        , click: function (node) {
+                            console.log(node)
+                            $(".branchname").text(node.name);
+                            branchId = node.id
+                        }
+                    })
+                } else {
+                    layer.msg(data.msg);
+                }
+
+            }, 'json');
         })
 
         getlist(0, 8, 1);
@@ -217,7 +253,7 @@
             $("#" + eleobj.wrapper).html('<div class="layui-clear"></div>\n' +
                 '                        <div id="' + eleobj.paging + '" class="paging"></div>');
 
-            $.post(commonUrl + eleobj.postUrl,postdata , function (data) {
+            $.post(commonUrl + eleobj.postUrl, postdata, function (data) {
                 if (data.success) {
                     var datalist = (type === 1?data.data["list"]:data.data["liveinfo"]["list"]);
                     if (datalist.length > 0) {

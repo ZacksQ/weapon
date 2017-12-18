@@ -8,12 +8,12 @@
 </head>
 <body>
 <div class="top">
-    <h1>视频直播平台</h1>
+    <h1><a href="index.html">视频直播平台</a></h1>
     <div class="user-nav fr">
         <div class="avatar">
             <img src="images/hom-hea-1.png" alt="">
         </div>
-        <span>花神科技园</span>
+        <span class="nickname"></span>
         <span class="dropdown-caret"></span>
         <div class="dropdown-menu">
             <ul>
@@ -21,7 +21,7 @@
                 <li><a href="my_shortcut.html">我的截图</a></li>
                 <li><a href="my_record.html">录制视频</a></li>
                 <li><a href="living_setting.html">直播设置</a></li>
-                <li><a href="javascript:;">退出</a></li>
+                <li><a href="javascript:;" id="loginout">退出</a></li>
             </ul>
         </div>
     </div>
@@ -33,8 +33,7 @@
     </div>
     <div class="main">
         <div class="search-box">
-            <input type="text" class="search-input" name="search">
-            <button type="button" class="layui-btn layui-btn-normal search-btn">
+            <input type="text" class="search-input" name="search"><button type="button" class="layui-btn layui-btn-normal search-btn">
                 <img src="images/search.png" alt="">搜索
             </button>
         </div>
@@ -145,7 +144,7 @@
                     var datalist = data.data[eleobj.name]["list"];
                     if (datalist.length > 0) {
                         datalist.forEach(function (element) {
-                            $("#" + eleobj.wrapper).prepend('<a href="' + eleobj.url + '?id=' + element.id +'&branchId=' + element. +'" class="video-item">\n' +
+                            $("#" + eleobj.wrapper).prepend('<a href="' + eleobj.url + '?id=' + element.id + '" class="video-item">\n' +
                                 '                            <div class="cover" style="background-image: url(' + element.coverImg + ')">\n' +
                                 '                            </div>\n' +
                                 '                            <div class="bt">\n' +
