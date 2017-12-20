@@ -43,9 +43,9 @@
                 <td width="10%">房间id：</td>
                 <td width="40%" id="roomid"></td>
                 <td width="10%">分辨率：</td>
-                <td width="40%"><div class="layui-form-item">
+                <td width="40%"><div class="layui-form-item resolution">
                     <input type="radio" name="resolution" value="1" title="960*540">
-                    <input type="radio" name="resolution" value="2" title="1280*720（推荐）"checked>
+                    <input type="radio" name="resolution" value="2" title="1280*720（推荐）">
                     <input type="radio" name="resolution" value="3" title="1920*1080">
               </div></td>
             </tr>
@@ -71,15 +71,16 @@
             </tr>
             <tr>
                 <td width="10%">房间封面：</td>
-                <td width="40%">
-                    <input type="radio" name="diycover" value="1" title="使用直播画面作为封面" checked><br/>
+                <td width="40%" class="diycover">
+                    <input type="radio" name="diycover" value="1" title="使用直播画面作为封面"><br/>
                     <input type="radio" name="diycover" value="2" title="使用自定义封面" >
                     <button type="button" class="layui-btn layui-btn-normal layui-btn-xs btn-change-cover">上传封面</button>
+                    <div class="cover-preview"><img src="http://123.206.221.228:8080/jungong/file/cover/default.png" alt=""></div>
                 </td>
                 <td width="10%">画质：</td>
-                <td width="40%"><div class="layui-form-item">
+                <td width="40%"><div class="layui-form-item pictureQuality">
                     <input type="radio" name="pictureQuality" value="1" title="高(CPU消耗高)">
-                    <input type="radio" name="pictureQuality" value="2" title="中" checked>
+                    <input type="radio" name="pictureQuality" value="2" title="中" >
                     <input type="radio" name="pictureQuality" value="3" title="低" >
                 </div></td>
             </tr>
@@ -101,6 +102,7 @@
     layui.use(['upload','form'], function(){
         var upload = layui.upload;
         var diyCoverImg = null;
+        var form = layui.form;
 
 
 
@@ -115,6 +117,7 @@
             , done: function (res) {
                 //上传完毕回调
                 diyCoverImg = res.data.list[0];
+                $(".cover-preview img").attr("src", commonUrl + diyCoverImg);
             }
             , error: function () {
                 //请求异常回调
@@ -129,6 +132,16 @@
                 $("#settingform input[name=codeRate]").val(setting.codeRate);
                 $("#settingform textarea[name=bewrite]").text(setting.bewrite);
                 $("#roomid").text(setting.roomId);
+
+                $(".resolution input[value=" + setting.resolution +"]").attr("checked", true);
+                $(".pictureQuality input[value=" + setting.pictureQuality +"]").attr("checked", true);
+                if(setting.diycover){
+                    $(".diycover input[value=2]").attr("checked", true);
+                    $(".cover-preview img").attr("src", setting.diyCoverImg);
+                }else{
+                    $(".diycover input[value=1]").attr("checked", true);
+                }
+                form.render();
             } else {
                 layer.msg(data.msg);
             }
@@ -144,6 +157,11 @@
                 function (i) {
                     postdata[formdata[i]["name"]] = formdata[i]["value"];
                 });
+            if(postdata.diycover == 1){
+                postdata.diycover = false;
+            }else{
+                postdata.diycover = true;
+            }
             $.post(commonUrl + 'liveinfo/set/intercalate', postdata, function (data) {
                 if (data.success) {
                     window.location.href="anchor_living.html";
