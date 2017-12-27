@@ -70,6 +70,7 @@
 <script src="js/jquery.min.js"></script>
 <script src="layui/layui.js"></script>
 <script src="js/common.js"></script>
+<script src="player/ckplayer/ckplayer.js" charset="utf-8"></script>
 <script>
     function edit(e, id){
         e.preventDefault()
@@ -168,7 +169,7 @@
                     var datalist = data.data["list"];
                     if (datalist.length > 0) {
                         datalist.forEach(function (element, i) {
-                            $("#" + eleobj.wrapper).prepend('<a href="" data-id="' + element.id + '" class="record-item ' + (i % 2 === 0?'': 'even') + '" data-id="' + element.id + '">\n' +
+                            $("#" + eleobj.wrapper).prepend('<a href="javascript:;" data-url="' + element.url +'" class="record-item' + (i % 2 === 0?'': 'even') + '" data-id="' + element.id + '">\n' +
                                 '                            <div class="cover fl">\n' +
                                 '                                <img src="' + element.coverImg + '" alt="">\n' +
                                 '                            </div>\n' +
@@ -181,7 +182,26 @@
                                 '                                <button onclick="edit(event, \'' + element.id + '\')" class="layui-btn layui-btn-normal layui-btn-xs">编辑</button><button type="button" onclick="del(event, \'' + element.id + '\')" class="layui-btn layui-btn-primary layui-btn-xs">删除</button>\n' +
                                 '                            </div>\n' +
                                 '                        </a>');
-                        })
+                        });
+
+                        $(".record-item .cover").click(function () {
+                            var _this = $(this);
+                            layer.open({
+                                area: ['600px','500px'],
+                                title: '视频播放',
+                                content: '<div id="iip"></div>'
+                            });
+
+                            var flashvars={
+                                a: _this.parent().attr("data-url"),
+                                f:'player/m3u8.swf',
+                                c:0,
+                                s:4
+                            };
+                            var video=[_this.parent().attr("data-url")];
+                            var params={bgcolor:'#FFF',allowFullScreen:true,allowScriptAccess:'always',wmode:'transparent'};
+                            CKobject.embed('player/ckplayer/ckplayer.swf','iip','ckplayer_a1','100%','360px',false,flashvars,video,params);
+                        });
 
                         var laypage = layui.laypage;
 
