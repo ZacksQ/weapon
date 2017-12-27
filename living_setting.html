@@ -11,7 +11,7 @@
     <h1><a href="index.html">视频直播平台</a></h1>
     <div class="user-nav fr">
         <div class="avatar">
-            <img src="images/hom-hea-1.png" alt="">
+            <img src="" alt="">
         </div>
         <span class="nickname"></span>
         <span class="dropdown-caret"></span>
@@ -61,7 +61,7 @@
             </tr>
             <tr>
                 <td width="10%">房间描述：</td>
-                <td width="40%">
+                <td width="40%" style="padding-bottom: 5px">
                     <textarea id="" cols="30" class="layui-textarea" name="bewrite" rows="10"></textarea>
                 </td>
                 <td width="10%">码率：</td>
@@ -72,10 +72,13 @@
             <tr>
                 <td width="10%">房间封面：</td>
                 <td width="40%" class="diycover">
-                    <input type="radio" name="diycover" value="1" title="使用直播画面作为封面"><br/>
-                    <input type="radio" name="diycover" value="2" title="使用自定义封面" >
+                    <!--<input type="radio" name="diycover" value="1" title="使用直播画面作为封面"><br/>-->
+                    <!--<input type="radio" name="diycover" value="2" title="使用自定义封面" >-->
+                    <input type="hidden" name="diycover" value="2">
                     <button type="button" class="layui-btn layui-btn-normal layui-btn-xs btn-change-cover">上传封面</button>
-                    <div class="cover-preview"><img src="http://123.206.221.228:8080/jungong/file/cover/default.png" alt=""></div>
+                    <div class="cover-preview">
+                        <img src="" alt="">
+                    </div>
                 </td>
                 <td width="10%">画质：</td>
                 <td width="40%"><div class="layui-form-item pictureQuality">

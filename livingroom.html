@@ -35,9 +35,10 @@
             </div>
             <div class="living-info">
                 <h2><span class="tit">任务：对H高低进行目标活动侦查！</span><span class="living-label">直播中</span></h2>
-                <div class="ib"><span class="nickname"></span><span class="living-roomid">房间00001</span><span
-                        class="stars"><span class="flh"><i class="layui-icon">&#xe600;</i>关注</span><span
-                        class="followers">0</span></span>
+                <div class="ib"><span class="nickname"></span><span class="living-roomid">房间00001</span>
+                    <!--<span-->
+                        <!--class="stars"><span class="flh"><i class="layui-icon">&#xe600;</i>关注</span><span-->
+                        <!--class="followers">0</span></span>-->
                     <div class="ctrl fr">
                         <span id="refresh"><i class="layui-icon">&#x1002;</i>重新加载</span>
                         <span><i class="layui-icon">&#xe64a;</i>抓屏</span>
@@ -62,30 +63,32 @@
         </div>
         <div class="discuss-wrapper">
             <div class="discuss-msglist">
-                <div class="msg-item msg-sys">
-                    一连三班进入直播室
-                </div>
-                <div class="msg-item">
-                    <span class="nickname">刘昴星：</span><span class="msg-content">
-                        这是什么型号的这是什么型号的这是什么型号的这是什么型号的这是什么型号的这是什么型号的
-                    </span>
-                </div>
-                <div class="msg-item ancthor">
-                    <span class="nickname">刘昴星：</span><span class="msg-content">
-                        这是什么型号的
-                    </span>
-                </div>
+                <!--<div class="msg-item msg-sys">-->
+                    <!--一连三班进入直播室-->
+                <!--</div>-->
+                <!--<div class="msg-item">-->
+                    <!--<span class="nickname">刘昴星：</span><span class="msg-content">-->
+                        <!--这是什么型号的这是什么型号的这是什么型号的这是什么型号的这是什么型号的这是什么型号的-->
+                    <!--</span>-->
+                <!--</div>-->
+                <!--<div class="msg-item ancthor">-->
+                    <!--<span class="nickname">刘昴星：</span><span class="msg-content">-->
+                        <!--这是什么型号的-->
+                    <!--</span>-->
+                <!--</div>-->
             </div>
             <div class="discuss-pannel">
-                <input type="text" id="msg-input">
-                <button class="layui-btn layui-btn-normal layui-btn-sm">发送</button>
+                <input type="text" id="msg-input" style="color: #000;">
+                <button class="layui-btn layui-btn-normal layui-btn-sm" id="sendBtn">发送</button>
             </div>
         </div>
     </div>
     <script src="js/jquery.min.js"></script>
     <script src="layui/layui.js"></script>
     <script src="js/common.js"></script>
-    <script type="text/javascript" src="player/ckplayer/ckplayer.js" charset="utf-8"></script>
+    <script src="player/ckplayer/ckplayer.js" charset="utf-8"></script>
+    <script src="js/sockjs-0.3.4.js"></script>
+    <script src="js/stomp.js"></script>
     <script>
         //                var videoUrl = "http://27046.live-vod.cdn.aodianyun.com/m3u8/0x0/merge/f7d7a7dc4fc8f1b194bd9c195cf01de1.m3u8";
         ////        var videoUrl = "http://27046.long-vod.cdn.aodianyun.com/u/27046/mp4/0x0/054be91836c21e0dab16be625bc1be62.mp4";
@@ -145,6 +148,10 @@
             var layer = layui.layer
                 , element = layui.element;
             var request = getRequest();
+
+
+
+
 //                var videoUrl = 'rtmp://27046.lssplay.aodianyun.com/newlive2016/f3204e51d8b0456988d561227483c938';
 
             $.post(commonUrl + 'liveinfo/get/info/' + request["id"], {}, function (data) {
@@ -236,6 +243,57 @@
                             });
                         })
                     })
+
+
+                    $("#sendBtn").click(function () {
+                        SendMsg(data.id, $("#msg-input"));
+                    });
+
+                    var url = commonUrl + "jgstomp";
+                    var sock = new SockJS(url);
+
+                    var stomp = Stomp.over(sock);
+
+                    var payload = JSON.stringify({"message":"marco!"});
+
+                    stomp.connect("guest","guest", function(frame){
+
+                        stomp.subscribe("/topic/" + data.roomId, handsp);
+
+                    });
+                    var date = new Date();
+                    var hour = '0' + date.getHours();
+                    hour = hour.substr(hour.length-2, hour.length);
+                    var minutes = '0' + date.getMinutes();
+                    minutes = minutes.substr(minutes.length-2, minutes.length);
+                    var second = '0' + date.getSeconds();
+                    second = second.substr(second.length-2, second.length);
+                    var now = date.getFullYear() + '-' + (parseInt(date.getMonth()) + 1) + '-' + date.getDate() + ' ' + hour + ':' + minutes + ':' + second;
+                    var discuss_msglist = document.querySelector(".discuss-msglist");
+
+                    $.post(commonUrl + 'chat/list?infoId=' + request["id"] +'&time=' + now +'&startNum=0&perNum=10', {}, function (json) {
+                        if(json.success){
+                            var historylist = json.data.list;
+                            historylist.reverse();
+                            historylist.forEach(function (t) {
+                                var msg_item = appendMsg(t.sendBody.nickname, t.sendBody.chatBody);
+                                discuss_msglist.appendChild(msg_item);
+                            });
+                        }else{
+                            layer.msg(json.msg);
+                        }
+                    }, 'json')
+
+                    function handsp(incomng) {
+                        var spo = JSON.parse(incomng.body);
+
+                        var msg_item = appendMsg(spo.nickname, spo.chatBody);
+
+                        discuss_msglist.appendChild(msg_item);
+                        var msglist = document.querySelectorAll(".msg-item")
+                        msglist[msglist.length -1].scrollIntoView()
+                        console.log(spo);
+                    }
 
                 } else {
                     layer.msg(data.msg);

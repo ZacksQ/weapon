@@ -1,4 +1,4 @@
-var commonUrl = 'http://123.206.221.228:8080/jungong/';
+var commonUrl = 'http://116.62.245.62:8080/jungong/';
 
 $(".dropdown-caret").on("click", function () {
     $(".dropdown-menu").toggle()
@@ -64,3 +64,34 @@ $("#loginout").click(function () {
         window.location.href = 'login.html';
     }, 'json');
 });
+
+function SendMsg(roomId, input) {
+    layui.use(['layer'], function () {
+        var layer = layui.layer
+        if ($.trim(input.val()) == '') {
+            layer.msg("发送消息不能为空");
+            return false;
+        }
+        $.post(commonUrl + 'chat/send', {
+            infoId: roomId,
+            chatType: 1,
+            chatBody: input.val()
+        }, function () {
+            input.val('');
+        }, 'json');
+    });
+}
+
+function appendMsg(nicknametxt, contentext) {
+    var msg_item = document.createElement("div"),
+        nickname = document.createElement("span"),
+        msg_content = document.createElement("span");
+    msg_item.setAttribute("class", 'msg-item');
+    nickname.setAttribute("class", 'nickname');
+    msg_content.setAttribute("class", 'msg-content');
+    nickname.appendChild(document.createTextNode(nicknametxt + "："));
+    msg_content.appendChild(document.createTextNode(contentext));
+    msg_item.appendChild(nickname);
+    msg_item.appendChild(msg_content);
+    return msg_item;
+}

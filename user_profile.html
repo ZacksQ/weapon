@@ -11,7 +11,7 @@
     <h1><a href="index.html">视频直播平台</a></h1>
     <div class="user-nav fr">
         <div class="avatar">
-            <img src="images/hom-hea-1.png" alt="">
+            <img src="" alt="">
         </div>
         <span class="nickname"></span>
         <span class="dropdown-caret"></span>
@@ -45,7 +45,7 @@
         <div class="user-info">
             <div class="avatar-wrapper fr">
                 <div class="avatar">
-                    <img src="images/hom-hea-1.png" alt="">
+                    <img src="" alt="">
                 </div>
                 <button type="button" class="layui-btn layui-btn layui-btn-normal layui-btn layui-btn-sm layui-col-lg12 btn-change-avatar">更换头像</button>
             </div>
@@ -258,7 +258,7 @@
                     var datalist = (type === 1?data.data["list"]:data.data["liveinfo"]["list"]);
                     if (datalist.length > 0) {
                         datalist.forEach(function (element) {
-                            $("#" + eleobj.wrapper).prepend('<a href="" class="video-item">\n' +
+                            $("#" + eleobj.wrapper).prepend('<a href="livingroom.html?id=' + element.id +'" class="video-item">\n' +
                                 '                            <div class="cover" style="background-image: url(' + element.coverImg + ')">\n' +
                                 '                            </div>\n' +
                                 '                            <div class="bt">\n' +
