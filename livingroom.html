@@ -149,11 +149,6 @@
                 , element = layui.element;
             var request = getRequest();
 
-
-
-
-//                var videoUrl = 'rtmp://27046.lssplay.aodianyun.com/newlive2016/f3204e51d8b0456988d561227483c938';
-
             $.post(commonUrl + 'liveinfo/get/info/' + request["id"], {}, function (data) {
                 if (data.success) {
                     var data = data.data;

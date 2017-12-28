@@ -75,6 +75,8 @@
                     <!--<input type="radio" name="diycover" value="1" title="使用直播画面作为封面"><br/>-->
                     <!--<input type="radio" name="diycover" value="2" title="使用自定义封面" >-->
                     <input type="hidden" name="diycover" value="2">
+                    <input type="hidden" value="" name="diyCoverImg">
+                    <input type="hidden" value="false" name="follow">
                     <button type="button" class="layui-btn layui-btn-normal layui-btn-xs btn-change-cover">上传封面</button>
                     <div class="cover-preview">
                         <img src="" alt="">
@@ -141,6 +143,7 @@
                 if(setting.diycover){
                     $(".diycover input[value=2]").attr("checked", true);
                     $(".cover-preview img").attr("src", setting.diyCoverImg);
+                    $("#settingform input[name=diyCoverImg]").val(setting.diyCoverImg);
                 }else{
                     $(".diycover input[value=1]").attr("checked", true);
                 }
@@ -170,7 +173,8 @@
                     window.location.href="anchor_living.html";
 
                 } else {
-                    layer.msg(data.msg);
+                    layer.msg("还有尚未配置的项目，请配置后开播");
+//                    layer.msg(data.msg);
                 }
             }, 'json');
             return false;
