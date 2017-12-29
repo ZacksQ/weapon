@@ -170,6 +170,9 @@
                 postdata.diycover = true;
                 var re = new RegExp('(' + commonUrl +')(.+)');
                 postdata.diyCoverImg = postdata.diyCoverImg.match(re)[2];
+                if(postdata.diyCoverImg.indexOf('/') != 0){
+                    postdata.diyCoverImg = '/' + postdata.diyCoverImg;
+                }
                 console.log(postdata.diyCoverImg);
             }
             $.post(commonUrl + 'liveinfo/set/intercalate', postdata, function (data) {
