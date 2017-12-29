@@ -123,6 +123,7 @@
                 //上传完毕回调
                 diyCoverImg = res.data.list[0];
                 $(".cover-preview img").attr("src", commonUrl + diyCoverImg);
+                $("#settingform input[name=diyCoverImg]").val(commonUrl + diyCoverImg);
             }
             , error: function () {
                 //请求异常回调
@@ -167,6 +168,9 @@
                 postdata.diycover = false;
             }else{
                 postdata.diycover = true;
+                var re = new RegExp('(' + commonUrl +')(.+)');
+                postdata.diyCoverImg = postdata.diyCoverImg.match(re)[2];
+                console.log(postdata.diyCoverImg);
             }
             $.post(commonUrl + 'liveinfo/set/intercalate', postdata, function (data) {
                 if (data.success) {
