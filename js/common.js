@@ -1,9 +1,9 @@
-var commonUrl = 'http://116.62.245.62:8080/jungong/';
+var commonUrl = 'http://180.76.102.144:8081/jungong/';
 
-$(".dropdown-caret").on("click", function () {
+$(".user-nav").on("click", function () {
     $(".dropdown-menu").toggle()
 })
-$(".dropdown-caret").on("click", function (e) {
+$(".user-nav").on("click", function (e) {
     e.stopPropagation()
 })
 $(document).on("click", function () {

@@ -83,7 +83,8 @@ html, body {
 }
 
 .top {
-    background: rgba(0, 118, 183, 1);
+    background: rgba(0, 118, 183, 1) url(../images/logo.png) no-repeat 20px 5px;
+    background-size: auto 55px;
     height: 65px;
     padding: 0 20px;
 }
@@ -91,6 +92,7 @@ html, body {
 .top h1{
     display: inline-block;
     margin-top: 8px;
+    margin-left: 80px;
 }
 .top h1 a{
     font-size: 32px;
@@ -100,6 +102,7 @@ html, body {
 .user-nav {
     margin-top: 8px;
     color: #fff;
+    cursor: pointer;
 }
 
 .user-nav .avatar {

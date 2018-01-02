@@ -73,7 +73,7 @@
 			<!--
 			提示点文字 
 			-->
-			<pr_cksetup>{font color='#FFFFFF' face='Microsoft YaHei,微软雅黑' size='14'}设置{/font}</pr_cksetup>
+			<!-- <pr_cksetup>{font color='#FFFFFF' face='Microsoft YaHei,微软雅黑' size='14'}设置{/font}</pr_cksetup> -->
 			<!--
 			鼠标经过设置提示的文字（该定义为插件所用）
 			-->

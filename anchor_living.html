@@ -129,7 +129,11 @@
                 minutes = minutes.substr(minutes.length-2, minutes.length);
                 var second = '0' + date.getSeconds();
                 second = second.substr(second.length-2, second.length);
-                var now = date.getFullYear() + '-' + (parseInt(date.getMonth()) + 1) + '-' + date.getDate() + ' ' + hour + ':' + minutes + ':' + second;
+                var month = '0' + (parseInt(date.getMonth()) + 1);
+                month = month.substr(second.length-2, second.length);
+                var day = '0' + date.getDate();
+                day = day.substr(second.length-2, second.length);
+                var now = date.getFullYear() + '-' + month + '-' + day + ' ' + hour + ':' + minutes + ':' + second;
                 var discuss_msglist = document.querySelector(".discuss-msglist");
 
                 $.post(commonUrl + 'chat/list?infoId=' + data.id +'&time=' + now +'&startNum=0&perNum=20', {}, function (json) {
