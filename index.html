@@ -79,11 +79,14 @@
 <script src="js/jquery.min.js"></script>
 <script src="layui/layui.js"></script>
 <script src="js/common.js"></script>
+<script src="player/ckplayer/ckplayer.js" charset="utf-8"></script>
 <script>
     layui.use(['layer', 'tree', 'element', 'laypage'], function () {
         var layer = layui.layer
             , form = layui.form
             , element = layui.element;
+
+
 
         $.post(commonUrl + 'branch/list', {}, function (data) {
             if (data.success) {
@@ -144,7 +147,10 @@
                     var datalist = data.data[eleobj.name]["list"];
                     if (datalist.length > 0) {
                         datalist.forEach(function (element) {
-                            $("#" + eleobj.wrapper).prepend('<a href="' + eleobj.url + '?id=' + element.id + '" class="video-item">\n' +
+                            if(type == 1){
+                                eleobj.url = eleobj.url + '?id=' + element.id;
+                            }
+                            $("#" + eleobj.wrapper).prepend('<a href="' + eleobj.url + '" ' + (type!=1?'data-url="' + element.url + '"':'') +' class="video-item">\n' +
                                 '                            <div class="cover" style="background-image: url(' + element.coverImg + ')">\n' +
                                 '                            </div>\n' +
                                 '                            <div class="bt">\n' +
@@ -156,6 +162,25 @@
                                 '                            </div>\n' +
                                 '                        </a>');
                         })
+
+                        $(".video-item[data-url]").bind("click", function() {
+                            var _this = $(this);
+                            layer.open({
+                                area: ['600px','500px'],
+                                title: '视频播放',
+                                content: '<div id="iip"></div>'
+                            });
+
+                            var flashvars={
+                                a: _this.attr("data-url"),
+                                f:'player/m3u8.swf',
+                                c:0,
+                                s:4
+                            };
+                            var video=[_this.attr("data-url")];
+                            var params={bgcolor:'#FFF',allowFullScreen:true,allowScriptAccess:'always',wmode:'transparent'};
+                            CKobject.embed('player/ckplayer/ckplayer.swf','iip','ckplayer_a1','100%','360px',false,flashvars,video,params);
+                        });
 
                         var laypage = layui.laypage;
 
