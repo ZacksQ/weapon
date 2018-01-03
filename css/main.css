@@ -165,15 +165,18 @@ html, body {
 }
 
 .search-input {
-    border-top: 1px solid #DCDCDC;
-    border-left: 1px solid #DCDCDC;
-    border-bottom: 1px solid #DCDCDC;
-    border-radius: 5px 0 0 5px;
+/*     border-top: 1px solid #8a8a8a;
+    border-left: 1px solid #8a8a8a;
+    border-bottom: 1px solid #8a8a8a;
+    border-right: 1px solid #8a8a8a; */
+/*     border-radius: 5px 0 0 5px; */
+    border: 1px solid #0278b9;
+    border-radius: 5px;
     height: 38px;
     line-height: 38px;
     width: 50%;
     vertical-align: middle;
-    border-right: 0;
+    /*border-right: 0;*/
     padding: 0 10px;
 }
 

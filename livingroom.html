@@ -36,9 +36,8 @@
             <div class="living-info">
                 <h2><span class="tit">任务：对H高低进行目标活动侦查！</span><span class="living-label">直播中</span></h2>
                 <div class="ib"><span class="nickname"></span><span class="living-roomid">房间00001</span>
-                    <!--<span-->
-                        <!--class="stars"><span class="flh"><i class="layui-icon">&#xe600;</i>关注</span><span-->
-                        <!--class="followers">0</span></span>-->
+                    <span class="stars"><span class="flh"><i class="layui-icon">&#xe600;</i><span class="fl-txt">关注</span></span><span
+                        class="followers">0</span></span>
                     <div class="ctrl fr">
                         <span id="refresh"><i class="layui-icon">&#x1002;</i>重新加载</span>
                         <span><i class="layui-icon">&#xe64a;</i>抓屏</span>
@@ -144,10 +143,19 @@
             window.location.href = window.location.href;
         })
 
+
+
         layui.use(['layer', 'element'], function () {
             var layer = layui.layer
                 , element = layui.element;
             var request = getRequest();
+            var isfollow = 2;
+            $.post(commonUrl + 'playhistory/add', {
+                playId: request["id"],
+                playType: 1
+            }, function () {
+
+            }, 'json');
 
             $.post(commonUrl + 'liveinfo/get/info/' + request["id"], {}, function (data) {
                 if (data.success) {
@@ -173,6 +181,38 @@
                     $(".ib .nickname").text(data.nickname);
                     $(".living-top .avatar img").attr("src", data.headImg);
 
+                    if(data.follow == false){
+                        $(".fl-txt").text("关注");
+                        isfollow = 2;
+                    }else{
+                        $(".fl-txt").text("取消关注");
+                        isfollow = 1;
+                    }
+
+                    $(".flh").click(function () {
+//                        if(isfollow == false){
+                            $.post(commonUrl + 'follow/follow', {
+                                followId: request["id"],
+//                                followId: userid,
+                                followType: 1,
+                                type: isfollow
+
+                            }, function () {
+//                                isfollow === 2? isfollow = 1: isfollow = 2;
+                                if(isfollow === 1){
+                                    $(".fl-txt").text("关注");
+                                    isfollow = 2;
+                                    $(".followers").text(Number($(".followers").text()) - 1);
+                                }else{
+                                    $(".fl-txt").text("取消关注");
+                                    isfollow = 1;
+                                    $(".followers").text(Number($(".followers").text()) + 1);
+                                }
+                            }, 'json');
+//                        }
+                    })
+
+                    $(".followers").text(data.follownum);
                     $(".add-item.default").click(function () {
                         var _this = $(this);
                         $.post(commonUrl + 'search/search', {

@@ -52,7 +52,8 @@
             <div class="user-data fl">
                 <div class="nickname"><span></span> <a href="javascript:;" class="user-edit"><i class="layui-icon">&#xe642;</i>编辑资料</a></div>
                 <div class="class-type"></div>
-                <p class="user-introduction"></p>
+                <p class="user-arm">装备：<span></span></p>
+                <p class="user-introduction">签名：<span></span></p>
             </div>
             <div class="layui-clear"></div>
         </div>
@@ -157,9 +158,15 @@
                 '    </div>\n' +
                 '  </div>' +
                 '<div class="layui-form-item layui-form-text">\n' +
+                '    <label class="layui-form-label">装备</label>\n' +
+                '    <div class="layui-input-block">\n' +
+                '      <textarea name="arm" placeholder="请输入内容" class="layui-textarea">' + $(".user-arm span").text() + '</textarea>\n' +
+                '    </div>\n' +
+                '  </div>' +
+                '<div class="layui-form-item layui-form-text">\n' +
                 '    <label class="layui-form-label">签名</label>\n' +
                 '    <div class="layui-input-block">\n' +
-                '      <textarea name="mood" placeholder="请输入内容" class="layui-textarea">' + $(".user-introduction").text() + '</textarea>\n' +
+                '      <textarea name="mood" placeholder="请输入内容" class="layui-textarea">' + $(".user-introduction span").text() + '</textarea>\n' +
                 '    </div>\n' +
                 '  </div>' +
                 '</form>'
@@ -179,7 +186,8 @@
                         if (data.success) {
                             $(".user-nav .nickname").text(postdata.nickname);
                             $(".user-data .nickname span").text(postdata.nickname);
-                            $(".user-introduction").text(postdata.mood);
+                            $(".user-introduction span").text(postdata.mood);
+                            $(".user-arm span").text(postdata.arm);
 
                             $.post(commonUrl + 'user/get/info', {}, function (data) {
                                 if (data.success) {
