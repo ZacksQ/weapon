@@ -20,7 +20,7 @@
                 <li><a href="user_profile.html">我的信息</a></li>
                 <li><a href="my_shortcut.html">我的截图</a></li>
                 <li><a href="my_record.html">录制视频</a></li>
-                <li><a href="living_setting.html">直播设置</a></li>
+                <li><a href="living_setting.html">我的直播</a></li>
                 <li><a href="javascript:;" id="loginout">退出</a></li>
             </ul>
         </div>
@@ -40,7 +40,7 @@
                         class="followers">0</span></span>
                     <div class="ctrl fr">
                         <span id="refresh"><i class="layui-icon">&#x1002;</i>重新加载</span>
-                        <span><i class="layui-icon">&#xe64a;</i>抓屏</span>
+                        <span id="shurtcut"><i class="layui-icon">&#xe64a;</i>抓屏</span>
                         <span><i class="layui-icon">&#xe6ed;</i>视频录制</span>
                         <span><i class="layui-icon">&#xe638;</i>子窗口模式</span>
                     </div>
@@ -88,6 +88,8 @@
     <script src="player/ckplayer/ckplayer.js" charset="utf-8"></script>
     <script src="js/sockjs-0.3.4.js"></script>
     <script src="js/stomp.js"></script>
+    <script src="js/qwebchannel.js"></script>
+    <script src="js/connect.js"></script>
     <script>
         //                var videoUrl = "http://27046.live-vod.cdn.aodianyun.com/m3u8/0x0/merge/f7d7a7dc4fc8f1b194bd9c195cf01de1.m3u8";
         ////        var videoUrl = "http://27046.long-vod.cdn.aodianyun.com/u/27046/mp4/0x0/054be91836c21e0dab16be625bc1be62.mp4";
@@ -180,13 +182,15 @@
                     $(".living-roomid").text('房间' + data.roomId);
                     $(".ib .nickname").text(data.nickname);
                     $(".living-top .avatar img").attr("src", data.headImg);
-
+                    if(data.liveStatus !== 3){
+                        $(".living-label").hide();
+                    }
                     if(data.follow == false){
                         $(".fl-txt").text("关注");
-                        isfollow = 2;
+                        isfollow = 1;
                     }else{
                         $(".fl-txt").text("取消关注");
-                        isfollow = 1;
+                        isfollow = 2;
                     }
 
                     $(".flh").click(function () {
@@ -200,13 +204,13 @@
                             }, function () {
 //                                isfollow === 2? isfollow = 1: isfollow = 2;
                                 if(isfollow === 1){
-                                    $(".fl-txt").text("关注");
-                                    isfollow = 2;
-                                    $(".followers").text(Number($(".followers").text()) - 1);
-                                }else{
                                     $(".fl-txt").text("取消关注");
-                                    isfollow = 1;
+                                    isfollow = 2;
                                     $(".followers").text(Number($(".followers").text()) + 1);
+                                }else{
+                                    $(".fl-txt").text("关注");
+                                    isfollow = 1;
+                                    $(".followers").text(Number($(".followers").text()) - 1);
                                 }
                             }, 'json');
 //                        }
@@ -239,7 +243,7 @@
                             }
 
                             layer.open({
-                                title: '视频选择',
+                                title: '直播间选择',
                                 area: ['600px', '400px'],
                                 content: htmlbody
                                 , btn: ['确定']

@@ -20,7 +20,7 @@
                 <li><a href="user_profile.html">我的信息</a></li>
                 <li><a href="my_shortcut.html">我的截图</a></li>
                 <li><a href="my_record.html">录制视频</a></li>
-                <li><a href="living_setting.html">直播设置</a></li>
+                <li><a href="living_setting.html">我的直播</a></li>
                 <li><a href="javascript:;" id="loginout">退出</a></li>
             </ul>
         </div>
@@ -142,23 +142,24 @@
                 perNum: perNum,
                 branchId: branchId,
                 hasChildren: true,
-                openLive: true,
+//                openLive: true,
                 searchWord: searchWord
             }, function (data) {
                 if (data.success) {
                     var datalist = data.data[eleobj.name]["list"];
                     if (datalist.length > 0) {
+                        datalist.reverse();
                         datalist.forEach(function (element) {
-                            if(type == 1){
-                                eleobj.url = eleobj.url + '?id=' + element.id;
-                            }
-                            $("#" + eleobj.wrapper).prepend('<a href="' + eleobj.url + '" ' + (type!=1?'data-url="' + element.url + '"':'') +' class="video-item">\n' +
+//                            if(type == 1){
+//                                eleobj.url = eleobj.url + '?id=' + element.id;
+//                            }
+                            $("#" + eleobj.wrapper).prepend('<a href="' + (type === 1?eleobj.url + '?id=' + element.id: eleobj.url) + '" ' + (type!=1?'data-url="' + element.url + '"':'') +' class="video-item">\n' +
                                 '                            <div class="cover" style="background-image: url(' + element.coverImg + ')">\n' +
                                 '                            </div>\n' +
                                 '                            <div class="bt">\n' +
                                 '                                <img src="' + element.headImg + '" class="avatar" alt="">\n' +
                                 '                                <div class="des fl">\n' +
-                                '                                    <div class="tit">' + element.title + '</div>\n' +
+                                '                                    <div class="tit">' + element.title + (element.liveStatus === 3?'<span class="living-label xs">直播中</span>':'') + '</div>\n' +
                                 '                                    <p class="location">' + element.bewrite + '</p>\n' +
                                 '                                </div>\n' +
                                 '                            </div>\n' +

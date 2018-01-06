@@ -1,12 +1,15 @@
 var commonUrl = 'http://180.76.102.144:8081/jungong/';
 var userid = null;
-$(".user-nav").on("click", function () {
+$(".user-nav").on("mouseover", function () {
     $(".dropdown-menu").toggle()
 })
-$(".user-nav").on("click", function (e) {
-    e.stopPropagation()
-})
-$(document).on("click", function () {
+// $(".user-nav").on("click", function () {
+//     $(".dropdown-menu").toggle()
+// })
+// $(".user-nav").on("click", function (e) {
+//     e.stopPropagation()
+// })
+$(document).on("mouseout", function () {
     $(".dropdown-menu").hide()
 })
 
