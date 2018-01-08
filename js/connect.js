@@ -13,10 +13,14 @@ window.onload = function () {
     var socket = new WebSocket(baseUrl);
 
     socket.onclose = function () {
+        core.receiveStopStream();    //关闭直播推流
+        core.receiveStopRecord();    //关闭录制
         console.error("web channel closed");
     };
     socket.onerror = function (error) {
         console.error("web channel error: " + error);
+        //页面关闭时
+
     };
     socket.onopen = function () {
         output("WebSocket connected, setting up QWebChannel.");
@@ -35,23 +39,30 @@ window.onload = function () {
             //     input.value = "";
             //     core.receiveText(text);
             // }
+            var isstartliving = false;
             //开启直播
             if (document.getElementById("startliving")) {
                 document.getElementById("startliving").onclick = function () {
                     //设置参数
-                    // var text;
-                    // var request = getRequest();
-                    $.post(commonUrl + 'liveinfo/get/intercalate', {}, function (data) {
-                        if (data.success) {
-                            var data = data.data;
-                            core.receiveStartStream(JSON.stringify(data));
-                            // console.log("success:开启直播")
-                        } else {
-                            console.log(data.msg);
-                        }
-                    }, 'json');
-                    // core.receiveStartStream("字符串");
-                    // core.receiveStartStream('开启');
+                    if (isstartliving === false) {
+                        $.post(commonUrl + 'liveinfo/get/intercalate', {}, function (data) {
+                            if (data.success) {
+                                var data = data.data;
+                                core.receiveStartStream(JSON.stringify(data));
+                                document.getElementById("startliving").innerHTML = '<i class="layui-icon">&#xe652;</i>结束直播';
+                                // console.log("success:开启直播")
+                                isstartliving = true;
+                            } else {
+                                console.log(data.msg);
+                            }
+                        }, 'json');
+                        // core.receiveStartStream("字符串");
+                        // core.receiveStartStream('开启');
+                    } else {
+                        isstartliving = false;
+                        document.getElementById("startliving").innerHTML = '<i class="layui-icon">&#xe652;</i>开启直播';
+                        core.receiveStopStream();
+                    }
                 }
             }
 
@@ -70,11 +81,42 @@ window.onload = function () {
             }
 
             //切换摄像头
-            if(document.getElementById("switchcamera")){
-                document.getElementById("switchcamera").onclick = function() {
+            if (document.getElementById("switchcamera")) {
+                document.getElementById("switchcamera").onclick = function () {
                     //设置参数
                     var text = 'switchcamera';
                     core.receiveSwitchCamera(text);
+                }
+            }
+            //开始录制
+            var isrecording = false;
+            if (document.getElementById("videorecord")) {
+                document.getElementById("videorecord").onclick = function () {
+                    if (isrecording === false) {
+                        var text = "videorecord"
+                        core.receiveStartRecord(text);
+                        isrecording = true;
+                        document.getElementById("videorecord").innerHTML = '<i class="layui-icon">&#xe6ed;</i>停止录制';
+                    }else{
+                        core.receiveStopRecord();
+                        isrecording = false;
+                        document.getElementById("videorecord").innerHTML = '<i class="layui-icon">&#xe6ed;</i>开始录制';
+                    }
+                }
+            }
+            //开启子窗口
+            if (document.getElementById("showmin")) {
+                document.getElementById("showmin").onclick = function () {
+
+                    var url = commonUrl + 'weapon/index.html';    //子窗口的URL地址
+                    core.receiveSubWindow(url);
+                }
+            }
+
+            //静音
+            if (document.getElementById("mute")) {
+                document.getElementById("mute").onclick = function () {
+                    core.receiveSilentCommand();
                 }
             }
 

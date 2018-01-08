@@ -264,7 +264,7 @@ html, body {
 }
 
 .video-item .tit {
-    margin-bottom: 5px;
+    /* margin-bottom: 5px; */
 }
 
 .video-item p {
@@ -554,10 +554,12 @@ html, body {
 }
 
 .video-wrapper {
-    width: 74%;
+    /* width: 74%; */
     padding: 20px 20px 0;
-    display: flex; /* flex-wrap:wrap */
+    display: flex;
+    /* flex-wrap:wrap */
     flex-direction: column;
+    width: 100%;
 }
 
 .video-wrapper .living-top {
@@ -571,15 +573,32 @@ html, body {
 }
 
 .discuss-wrapper {
-    width: 24%;
+    width: 30%;
     background-color: #232323;
     color: #fff;
     font-size: 12px;
     padding: 20px 30px;
     float: right;
-    overflow: hidden;
+    /* overflow: hidden; */
+    /* display: none; */
+    position: relative;
+    transition: width .1s;
+    -webkit-transition: width .1s;
+    -moz-transition: width .1s;
 }
-
+.hidediscuss{
+    background-color: #232323;
+    color: #fff;
+    width: 30px;
+    height: 70px;
+    line-height: 70px;
+    border-radius: 3px 0 0 3px;
+    position: absolute;
+    left: -20px;
+    z-index: 9;
+    text-align: center;
+    cursor: pointer;
+}
 .living-top .avatar {
     width: 76px;
     height: 76px;
@@ -817,4 +836,15 @@ html, body {
 .living-label.xs {
     font-size: 12px;
     margin-left: 5px;
+}
+
+#record-wrapper .record-item:hover{
+    background-color: #d8d8d8;
+}
+
+#classlist a:hover cite {
+    border-bottom: 2px solid #0095e6;
+    transition: border .1s;
+    -webkit-transition: border .1s;
+    -moz-transition: border .1s;
 }

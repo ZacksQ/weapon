@@ -74,7 +74,11 @@ function SendMsg(roomId, input) {
     layui.use(['layer'], function () {
         var layer = layui.layer
         if ($.trim(input.val()) == '') {
-            layer.msg("发送消息不能为空");
+            // layer.msg("发送消息不能为空");
+            var discuss_msglist = document.querySelector(".discuss-msglist");
+            discuss_msglist.appendChild(sendSysMsg("发送消息不能为空"));
+            var msglist = document.querySelectorAll(".msg-item")
+            msglist[msglist.length -1].scrollIntoView()
             return false;
         }
         $.post(commonUrl + 'chat/send', {
@@ -97,6 +101,16 @@ function appendMsg(nicknametxt, contentext) {
     nickname.appendChild(document.createTextNode(nicknametxt + "："));
     msg_content.appendChild(document.createTextNode(contentext));
     msg_item.appendChild(nickname);
+    msg_item.appendChild(msg_content);
+    return msg_item;
+}
+
+function sendSysMsg(contentext) {
+    var msg_item = document.createElement("div"),
+        msg_content = document.createElement("span");
+    msg_item.setAttribute("class", 'msg-item msg-sys');
+    msg_content.setAttribute("class", 'msg-content');
+    msg_content.appendChild(document.createTextNode(contentext));
     msg_item.appendChild(msg_content);
     return msg_item;
 }
