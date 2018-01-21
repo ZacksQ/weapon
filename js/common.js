@@ -1,4 +1,5 @@
-var commonUrl = 'http://180.76.102.144:8081/jungong/';
+var commonUrl = 'http://180.76.184.214:9080/jungong/';
+// var commonUrl = 'http://180.76.102.144:8081/jungong/';
 var userid = null;
 $(".user-nav").on("mouseover", function () {
     $(".dropdown-menu").toggle()
@@ -25,9 +26,10 @@ if(window.location.href.indexOf('login') == -1){
             var classtype = userinfo.branchName.reverse();
             $('.class-type').html(classtype.join('<i class="layui-icon">&#xe623;</i>'));
             userid = userinfo.id;
-        }else if(data.code == 1801){
-            window.location.href = 'login.html';
         }
+        // else if(data.code == 1801){
+        //     window.location.href = 'login.html';
+        // }
     }, 'json');
 }
 
@@ -55,14 +57,14 @@ function getRequest() {
     return theRequest;
 }
 
-// $(document).ajaxComplete(function (event, xhr, settings) {
-//     var sessionStatus = xhr.getResponseHeader("sessionstatus");
-//     if (typeof (sessionStatus) !== 'undefined' && sessionStatus != null) {
-//         if (sessionStatus === "timeout") {
-//             window.location.href = "login.html";
-//         }
-//     }
-// });
+$(document).ajaxComplete(function (event, xhr, settings) {
+    var sessionStatus = xhr.getResponseHeader("sessionstatus");
+    if (typeof (sessionStatus) !== 'undefined' && sessionStatus != null) {
+        if (sessionStatus === "timeout") {
+            window.location.href = "login.html";
+        }
+    }
+});
 
 $("#loginout").click(function () {
     $.post(commonUrl + 'signOut', {}, function () {

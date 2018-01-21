@@ -21,7 +21,7 @@
 </head>
 <body>
 <div class="top">
-    <h1><a href="index.html">视频直播平台</a></h1>
+    <h1><a href="index.html">视频支援服务</a></h1>
     <div class="user-nav fr">
         <div class="avatar">
             <img src="" alt="">
@@ -115,7 +115,14 @@
                 <td width="10%"></td>
                 <td width="40%"></td>
                 <td width="10%"></td>
-                <td width="40%"><button type="submit" class="layui-btn layui-btn-normal fr intoliving">进入直播房间</button></td>
+                <td width="40%">
+                    <button type="submit" class="layui-btn layui-btn-normal fr intoliving">进入直播房间</button>
+
+                    <button type="button" class="layui-btn" id="uploadVod">
+                        <i class="layui-icon">&#xe67c;</i>本地视频上传
+                    </button>
+                    <i class="layui-icon layui-anim layui-anim-rotate layui-anim-loop uploading" style="display: none">&#xe63d;</i>
+                </td>
             </tr>
         </table>
         </form>
@@ -128,12 +135,38 @@
 <script src="js/common.js"></script>
 <script src="js/powerange.min.js"></script>
 <script>
-    layui.use(['upload','form'], function(){
+    layui.use(['upload','form', 'layer'], function(){
         var upload = layui.upload;
         var diyCoverImg = null;
         var form = layui.form;
-
-
+        var layer = layui.layer
+        //执行实例
+        var uploadVod = upload.render({
+            elem: '#uploadVod' //绑定元素
+            ,url: 'http://106.14.194.241:10080/api/upload' //上传接口
+            ,accept: 'video'
+            ,before: function () {
+                $(".uploading").show()
+            }
+            ,done: function(res){
+                //上传完毕回调
+                var name = res.files[0].name;
+//                console.log(res)
+                $.post(commonUrl + 'video/add', {
+                    title: '本地视频',
+                    bewrite: '本地视频',
+                    url: name
+                }, function (data) {
+                    if(data.success){
+                        $(".uploading").hide()
+                        layer.msg("上传成功")
+                    }
+                }, 'json')
+            }
+            ,error: function(){
+                //请求异常回调
+            }
+        });
 
 
         //执行实例
@@ -224,6 +257,10 @@
                 }
             }, 'json');
             return false;
+        })
+
+        $(".upload-local-vod").click(function () {
+
         })
     });
 </script>

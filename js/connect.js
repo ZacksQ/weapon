@@ -49,7 +49,7 @@ window.onload = function () {
                             if (data.success) {
                                 var data = data.data;
                                 core.receiveStartStream(JSON.stringify(data));
-                                document.getElementById("startliving").innerHTML = '<i class="layui-icon">&#xe652;</i>结束直播';
+                                document.getElementById("startliving").innerHTML = '<i class="layui-icon">&#xe652;</i>结束摄像直播';
                                 // console.log("success:开启直播")
                                 isstartliving = true;
                             } else {
@@ -60,7 +60,7 @@ window.onload = function () {
                         // core.receiveStartStream('开启');
                     } else {
                         isstartliving = false;
-                        document.getElementById("startliving").innerHTML = '<i class="layui-icon">&#xe652;</i>开启直播';
+                        document.getElementById("startliving").innerHTML = '<i class="layui-icon">&#xe652;</i>开启摄像直播';
                         core.receiveStopStream();
                     }
                 }
@@ -114,8 +114,17 @@ window.onload = function () {
             }
 
             //静音
+            var ismute = false;
             if (document.getElementById("mute")) {
                 document.getElementById("mute").onclick = function () {
+                    if(ismute === false){
+                        ismute = true;
+
+                        document.getElementById("mute").innerHTML = '<i class="layui-icon" style="text-decoration: line-through;">&#xe6fc;</i>麦克风';
+                    }else{
+                        ismute = false;
+                        document.getElementById("mute").innerHTML = '<i class="layui-icon">&#xe6fc;</i>麦克风';
+                    }
                     core.receiveSilentCommand();
                 }
             }

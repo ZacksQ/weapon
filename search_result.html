@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <title>视频直播</title>
@@ -8,20 +8,21 @@
 </head>
 <body class="search-result">
 <div class="top">
-    <h1>视频直播平台</h1>
+    <h1><a href="index.html">视频支援服务</a></h1>
     <div class="user-nav fr">
         <div class="avatar">
-            <img src="images/hom-hea-1.png" alt="">
+            <img src="" alt="">
         </div>
-        <span>花神科技园</span>
+        <span class="nickname"></span>
         <span class="dropdown-caret"></span>
         <div class="dropdown-menu">
             <ul>
-                <li><a href="">我的信息</a></li>
-                <li><a href="">我的截图</a></li>
-                <li><a href="">录制视频</a></li>
-                <li><a href="">我的直播</a></li>
-                <li><a href="">退出</a></li>
+                <li><a href="index.html">首页</a></li>
+                <li><a href="user_profile.html">我的信息</a></li>
+                <li><a href="my_shortcut.html">我的截图</a></li>
+                <li><a href="my_record.html">录制视频</a></li>
+                <li><a href="living_setting.html">我的直播</a></li>
+                <li><a href="javascript:;" id="loginout">退出</a></li>
             </ul>
         </div>
     </div>
@@ -29,7 +30,8 @@
 <div class="ind-container">
     <div class="main">
         <div class="search-box">
-            <input type="text" class="search-input" name="search"><button type="button" class="layui-btn layui-btn-normal search-btn">
+            <input type="text" class="search-input" name="search">
+            <button type="button" class="layui-btn layui-btn-normal search-btn">
                 <img src="images/search.png" alt="">搜索
             </button>
         </div>
@@ -43,212 +45,66 @@
                 <div class="layui-tab-item layui-show">
                     <div class="ind-video-wrapper">
                         <h2>相关直播</h2>
-                        <a href="" class="video-item">
-                            <div class="cover" style="background-image: url(images/sea-pho-1.png)">
-                                <!--<img src="images/sea-pho-1.png" alt="">-->
-                            </div>
-                            <div class="bt">
-                                <!--<div class="avatar">-->
-                                <img src="images/hom-hea-1.png" class="avatar fl" alt="">
-                                <!--</div>-->
-                                <div class="des fl">
-                                    <div class="tit">侦查1班</div>
-                                    <p class="location">位置：N33°16′54.57″</p>
-                                    <p class="mission">任务：勘测9点钟方向3公里行动情况″</p>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="" class="video-item">
-                            <div class="cover" style="background-image: url(images/sea-pho-1.png)">
-                                <!--<img src="images/sea-pho-1.png" alt="">-->
-                            </div>
-                            <div class="bt">
-                                <!--<div class="avatar">-->
-                                <img src="images/hom-hea-1.png" class="avatar fl" alt="">
-                                <!--</div>-->
-                                <div class="des fl">
-                                    <div class="tit">侦查1班</div>
-                                    <p class="location">位置：N33°16′54.57″</p>
-                                    <p class="mission">任务：勘测9点钟方向3公里行动情况″</p>
-                                </div>
-                            </div>
-                        </a>
+                        <div class="correlation-living"></div>
                         <h2>相关视频</h2>
-                        <a href="" class="video-item">
-                            <div class="cover" style="background-image: url(images/sea-pho-1.png)">
-                                <!--<img src="images/sea-pho-1.png" alt="">-->
-                            </div>
-                            <div class="bt">
-                                <!--<div class="avatar">-->
-                                <img src="images/hom-hea-1.png" class="avatar fl" alt="">
+                        <div class="correlation-vod"></div>
+                        <!--<a href="" class="video-item">-->
+                            <!--<div class="cover" style="background-image: url(images/sea-pho-1.png)">-->
+                                <!--&lt;!&ndash;<img src="images/sea-pho-1.png" alt="">&ndash;&gt;-->
+                            <!--</div>-->
+                            <!--<div class="bt">-->
+                                <!--&lt;!&ndash;<div class="avatar">&ndash;&gt;-->
+                                <!--<img src="images/hom-hea-1.png" class="avatar fl" alt="">-->
+                                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                <!--<div class="des fl">-->
+                                    <!--<div class="tit">侦查1班</div>-->
+                                    <!--<p class="location">位置：N33°16′54.57″</p>-->
+                                    <!--<p class="mission">任务：勘测9点钟方向3公里行动情况″</p>-->
                                 <!--</div>-->
-                                <div class="des fl">
-                                    <div class="tit">侦查1班</div>
-                                    <p class="location">位置：N33°16′54.57″</p>
-                                    <p class="mission">任务：勘测9点钟方向3公里行动情况″</p>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="" class="video-item">
-                            <div class="cover" style="background-image: url(images/sea-pho-1.png)">
-                                <!--<img src="images/sea-pho-1.png" alt="">-->
-                            </div>
-                            <div class="bt">
-                                <!--<div class="avatar">-->
-                                <img src="images/hom-hea-1.png" class="avatar fl" alt="">
-                                <!--</div>-->
-                                <div class="des fl">
-                                    <div class="tit">侦查1班</div>
-                                    <p class="location">位置：N33°16′54.57″</p>
-                                    <p class="mission">任务：勘测9点钟方向3公里行动情况″</p>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="" class="video-item">
-                            <div class="cover" style="background-image: url(images/sea-pho-1.png)">
-                                <!--<img src="images/sea-pho-1.png" alt="">-->
-                            </div>
-                            <div class="bt">
-                                <!--<div class="avatar">-->
-                                <img src="images/hom-hea-1.png" class="avatar fl" alt="">
-                                <!--</div>-->
-                                <div class="des fl">
-                                    <div class="tit">侦查1班</div>
-                                    <p class="location">位置：N33°16′54.57″</p>
-                                    <p class="mission">任务：勘测9点钟方向3公里行动情况″</p>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="" class="video-item">
-                            <div class="cover" style="background-image: url(images/sea-pho-1.png)">
-                                <!--<img src="images/sea-pho-1.png" alt="">-->
-                            </div>
-                            <div class="bt">
-                                <!--<div class="avatar">-->
-                                <img src="images/hom-hea-1.png" class="avatar fl" alt="">
-                                <!--</div>-->
-                                <div class="des fl">
-                                    <div class="tit">侦查1班</div>
-                                    <p class="location">位置：N33°16′54.57″</p>
-                                    <p class="mission">任务：勘测9点钟方向3公里行动情况″</p>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="" class="video-item">
-                            <div class="cover" style="background-image: url(images/sea-pho-1.png)">
-                                <!--<img src="images/sea-pho-1.png" alt="">-->
-                            </div>
-                            <div class="bt">
-                                <!--<div class="avatar">-->
-                                <img src="images/hom-hea-1.png" class="avatar fl" alt="">
-                                <!--</div>-->
-                                <div class="des fl">
-                                    <div class="tit">侦查1班</div>
-                                    <p class="location">位置：N33°16′54.57″</p>
-                                    <p class="mission">任务：勘测9点钟方向3公里行动情况″</p>
-                                </div>
-                            </div>
-                        </a>
+                            <!--</div>-->
+                        <!--</a>-->
+                        <!---->
                     </div>
 
                 </div>
                 <div class="layui-tab-item">
-                    <div class="ind-video-wrapper">
-                        <a href="" class="video-item">
-                            <div class="cover" style="background-image: url(images/sea-pho-2.png)">
-                                <!--<img src="images/sea-pho-1.png" alt="">-->
-                            </div>
-                            <div class="bt">
-                                <!--<div class="avatar">-->
-                                <img src="images/hom-hea-2.png" class="avatar fl" alt="">
+                    <div class="ind-video-wrapper correlation-living">
+                        <!--<a href="" class="video-item">-->
+                            <!--<div class="cover" style="background-image: url(images/sea-pho-2.png)">-->
+                                <!--&lt;!&ndash;<img src="images/sea-pho-1.png" alt="">&ndash;&gt;-->
+                            <!--</div>-->
+                            <!--<div class="bt">-->
+                                <!--&lt;!&ndash;<div class="avatar">&ndash;&gt;-->
+                                <!--<img src="images/hom-hea-2.png" class="avatar fl" alt="">-->
+                                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                <!--<div class="des fl">-->
+                                    <!--<div class="tit">侦查1班</div>-->
+                                    <!--<p class="location">位置：N33°16′54.57″</p>-->
+                                    <!--<p class="mission">任务：勘测9点钟方向3公里行动情况″</p>-->
                                 <!--</div>-->
-                                <div class="des fl">
-                                    <div class="tit">侦查1班</div>
-                                    <p class="location">位置：N33°16′54.57″</p>
-                                    <p class="mission">任务：勘测9点钟方向3公里行动情况″</p>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="" class="video-item">
-                            <div class="cover" style="background-image: url(images/sea-pho-2.png)">
-                                <!--<img src="images/sea-pho-1.png" alt="">-->
-                            </div>
-                            <div class="bt">
-                                <!--<div class="avatar">-->
-                                <img src="images/hom-hea-2.png" class="avatar fl" alt="">
-                                <!--</div>-->
-                                <div class="des fl">
-                                    <div class="tit">侦查1班</div>
-                                    <p class="location">位置：N33°16′54.57″</p>
-                                    <p class="mission">任务：勘测9点钟方向3公里行动情况″</p>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="" class="video-item">
-                            <div class="cover" style="background-image: url(images/sea-pho-2.png)">
-                                <!--<img src="images/sea-pho-1.png" alt="">-->
-                            </div>
-                            <div class="bt">
-                                <!--<div class="avatar">-->
-                                <img src="images/hom-hea-2.png" class="avatar fl" alt="">
-                                <!--</div>-->
-                                <div class="des fl">
-                                    <div class="tit">侦查1班</div>
-                                    <p class="location">位置：N33°16′54.57″</p>
-                                    <p class="mission">任务：勘测9点钟方向3公里行动情况″</p>
-                                </div>
-                            </div>
-                        </a>
+                            <!--</div>-->
+                        <!--</a>-->
+
 
                     </div>
                 </div>
                 <div class="layui-tab-item">
-                    <div class="ind-video-wrapper">
-                        <a href="" class="video-item">
-                            <div class="cover" style="background-image: url(images/sea-pho-3.png)">
-                                <!--<img src="images/sea-pho-1.png" alt="">-->
-                            </div>
-                            <div class="bt">
-                                <!--<div class="avatar">-->
-                                <img src="images/hom-hea-3.png" class="avatar fl" alt="">
+                    <div class="ind-video-wrapper correlation-vod">
+                        <!--<a href="" class="video-item">-->
+                            <!--<div class="cover" style="background-image: url(images/sea-pho-3.png)">-->
+                                <!--&lt;!&ndash;<img src="images/sea-pho-1.png" alt="">&ndash;&gt;-->
+                            <!--</div>-->
+                            <!--<div class="bt">-->
+                                <!--&lt;!&ndash;<div class="avatar">&ndash;&gt;-->
+                                <!--<img src="images/hom-hea-3.png" class="avatar fl" alt="">-->
+                                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                <!--<div class="des fl">-->
+                                    <!--<div class="tit">侦查1班</div>-->
+                                    <!--<p class="location">位置：N33°16′54.57″</p>-->
+                                    <!--<p class="mission">任务：勘测9点钟方向3公里行动情况″</p>-->
                                 <!--</div>-->
-                                <div class="des fl">
-                                    <div class="tit">侦查1班</div>
-                                    <p class="location">位置：N33°16′54.57″</p>
-                                    <p class="mission">任务：勘测9点钟方向3公里行动情况″</p>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="" class="video-item">
-                            <div class="cover" style="background-image: url(images/sea-pho-3.png)">
-                                <!--<img src="images/sea-pho-1.png" alt="">-->
-                            </div>
-                            <div class="bt">
-                                <!--<div class="avatar">-->
-                                <img src="images/hom-hea-3.png" class="avatar fl" alt="">
-                                <!--</div>-->
-                                <div class="des fl">
-                                    <div class="tit">侦查1班</div>
-                                    <p class="location">位置：N33°16′54.57″</p>
-                                    <p class="mission">任务：勘测9点钟方向3公里行动情况″</p>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="" class="video-item">
-                            <div class="cover" style="background-image: url(images/sea-pho-3.png)">
-                                <!--<img src="images/sea-pho-1.png" alt="">-->
-                            </div>
-                            <div class="bt">
-                                <!--<div class="avatar">-->
-                                <img src="images/hom-hea-3.png" class="avatar fl" alt="">
-                                <!--</div>-->
-                                <div class="des fl">
-                                    <div class="tit">侦查1班</div>
-                                    <p class="location">位置：N33°16′54.57″</p>
-                                    <p class="mission">任务：勘测9点钟方向3公里行动情况″</p>
-                                </div>
-                            </div>
-                        </a>
+                            <!--</div>-->
+                        <!--</a>-->
 
                     </div>
                 </div>
@@ -265,6 +121,91 @@
         var layer = layui.layer
             , form = layui.form
             , element = layui.element;
+
+        var request = getRequest();
+
+        getlist("correlation-living", 0, 0, 1, null, request["search"]);
+        getlist("correlation-vod", 0, 0, 2, null, request["search"]);
+        $(".search-input").val(request["search"]);
+        function getlist(wrapper, startNum, perNum, type, branchId, searchWord) {
+            var eleobj = {
+                wrapper: wrapper,
+                paging: '',
+                name: '',
+                url: ''
+            };
+
+            switch (type) {
+                case 1:
+                    eleobj.name = 'liveinfo';
+                    eleobj.url = 'livingroom.html';
+                    break;
+                case 2:
+                    eleobj.name = 'video';
+                    eleobj.url = 'javascript:;';
+                    break;
+            }
+            $("." + eleobj.wrapper).html('<div class="layui-clear"></div>\n');
+//            perNum = 1
+            $.post(commonUrl + 'search/search', {
+                types: type,
+                startNum: startNum,
+                perNum: perNum,
+                branchId: branchId,
+                hasChildren: true,
+//                openLive: true,
+                searchWord: searchWord
+            }, function (data) {
+                if (data.success) {
+                    var datalist = data.data[eleobj.name]["list"];
+                    if (datalist.length > 0) {
+                        datalist.reverse();
+                        datalist.forEach(function (element) {
+//                            if(type == 1){
+//                                eleobj.url = eleobj.url + '?id=' + element.id;
+//                            }
+                            $("." + eleobj.wrapper).prepend('<a href="' + (type === 1?eleobj.url + '?id=' + element.id: eleobj.url) + '" ' + (type!=1?'data-url="' + element.url + '"':'') +' class="video-item">\n' +
+                                '                            <div class="cover" style="background-image: url(' + element.coverImg + ')">\n' +
+                                '                            </div>\n' +
+                                '                            <div class="bt">\n' +
+                                '                                <img src="' + element.headImg + '" class="avatar" alt="">\n' +
+                                '                                <div class="des fl">' +
+
+                                '                                    <div class="tit">' + element.title + (element.liveStatus === 3?'<span class="living-label xs">直播中</span>':'') + '</div>\n' +
+                                '<div style="font-size: 12px">' + element.nickname +'</div> '+
+                                '                                    <p class="location">' + element.bewrite + '</p>\n' +
+                                '                                </div>\n' +
+                                '                            </div>\n' +
+                                '                        </a>');
+                        })
+
+                        $(".video-item[data-url]").bind("click", function() {
+                            var _this = $(this);
+                            layer.open({
+                                area: ['600px','500px'],
+                                title: '视频播放',
+                                content: '<div id="iip"></div>'
+                            });
+
+                            var flashvars={
+                                a: _this.attr("data-url"),
+                                f:'player/m3u8.swf',
+                                c:0,
+                                s:4
+                            };
+                            var video=[_this.attr("data-url")];
+                            var params={bgcolor:'#FFF',allowFullScreen:true,allowScriptAccess:'always',wmode:'transparent'};
+                            CKobject.embed('player/ckplayer/ckplayer.swf','iip','ckplayer_a1','100%','360px',false,flashvars,video,params);
+                        });
+
+                    }else{
+                        $("#" + eleobj.wrapper).html("暂无数据")
+                    }
+                } else {
+                    layer.msg(data.msg);
+                }
+            }, 'json');
+        }
 
     });
 
