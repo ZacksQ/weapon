@@ -14,31 +14,49 @@ $(document).on("mouseout", function () {
     $(".dropdown-menu").hide()
 })
 
-if(window.location.href.indexOf('login') == -1){
-    $.post(commonUrl + 'user/get/info', {}, function (data) {
-        if (data.success) {
-            var userinfo = data.data;
-            $(".user-nav .nickname").text(userinfo.nickname);
-            $(".user-data .nickname span").text(userinfo.nickname);
-            $(".user-introduction span").text(userinfo.mood);
-            $(".user-arm span").text(userinfo.arm);
-            $(".avatar img").attr("src", userinfo.headImg);
-            var classtype = userinfo.branchName.reverse();
-            $('.class-type').html(classtype.join('<i class="layui-icon">&#xe623;</i>'));
-            userid = userinfo.id;
-        }
-        // else if(data.code == 1801){
-        //     window.location.href = 'login.html';
-        // }
-    }, 'json');
+var userId = localStorage.getItem("userId");
+if (userId !== null) {
+    $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
+        // Modify options, control originalOptions, store jqXHR, etc
+        jqXHR.setRequestHeader("LoginUserId_", userid)
+    });
 }
 
-function ext(filename){
-    if(filename == null){ return false }
+if (window.location.href.indexOf('login') == -1) {
+    $.ajax({
+        url: commonUrl + 'user/get/info',
+        headers: {
+            "LoginUserId_": userId
+        },
+        dataType: 'json',
+        type: 'POST',
+        success: function (data) {
+            if (data.success) {
+                var userinfo = data.data;
+                $(".user-nav .nickname").text(userinfo.nickname);
+                $(".user-data .nickname span").text(userinfo.nickname);
+                $(".user-introduction span").text(userinfo.mood);
+                $(".user-arm span").text(userinfo.arm);
+                $(".avatar img").attr("src", userinfo.headImg);
+                var classtype = userinfo.branchName.reverse();
+                $('.class-type').html(classtype.join('<i class="layui-icon">&#xe623;</i>'));
+                userid = userinfo.id;
+            }
+            // else if(data.code == 1801){
+            //     window.location.href = 'login.html';
+            // }
+        }
+    });
+}
+
+function ext(filename) {
+    if (filename == null) {
+        return false
+    }
     var ext = null;
     var name = filename.toLowerCase();
     var i = name.lastIndexOf(".");
-    if(i > -1){
+    if (i > -1) {
         var ext = name.substring(i);
     }
     return ext;
@@ -80,7 +98,7 @@ function SendMsg(roomId, input) {
             var discuss_msglist = document.querySelector(".discuss-msglist");
             discuss_msglist.appendChild(sendSysMsg("发送消息不能为空"));
             var msglist = document.querySelectorAll(".msg-item")
-            msglist[msglist.length -1].scrollIntoView()
+            msglist[msglist.length - 1].scrollIntoView()
             return false;
         }
         $.post(commonUrl + 'chat/send', {

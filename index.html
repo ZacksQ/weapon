@@ -90,10 +90,15 @@
         var layer = layui.layer
             , form = layui.form
             , element = layui.element;
-
-
-
-        $.post(commonUrl + 'branch/list', {}, function (data) {
+//        var userid = localStorage.getItem("userId");
+        $.ajax({
+            url: commonUrl + 'branch/list',
+            type: 'POST',
+            dataType: 'json',
+//            headers: {
+//                "LoginUserId_": userid
+//            },
+            success: function (data) {
             if (data.success) {
                 var treedata = data.data.list;
                 layui.tree({
@@ -108,8 +113,7 @@
             } else {
                 layer.msg(data.msg);
             }
-
-        }, 'json');
+        }});
 
         getlist(0, 8, 1);
         getlist(0, 8, 2);

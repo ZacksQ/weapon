@@ -45,6 +45,7 @@
 //            console.log(postdata)
             $.post(commonUrl + 'signIn', postdata, function (data) {
                 if (data.success === true) {
+                    localStorage.setItem("userId", data.data["userId"]);
                     window.location.href = 'index.html';
                 } else {
                     layer.msg(data.msg)
