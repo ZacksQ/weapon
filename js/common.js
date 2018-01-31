@@ -1,5 +1,5 @@
 // var commonUrl = 'http://180.76.184.214:9080/jungong/';
-var commonUrl = 'http://192.168.1.102:8080/jungong/';
+var commonUrl = 'http://192.168.1.91:8080/jungong/';
 var userid = null;
 $(".user-nav").on("mouseover", function () {
     $(".dropdown-menu").toggle()

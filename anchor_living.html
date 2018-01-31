@@ -98,87 +98,94 @@
         }
 
     })
-    $.post(commonUrl + 'liveinfo/get/intercalate', {}, function (data) {
-        if (data.success) {
-            var data = data.data;
-            var flashvars = {
-                f: data.stream1.lsspublishUrl,
-                c: 0,
-                b: 1,
-                p: 1,
-                lv: 1
-            };
-            var params = {
-                bgcolor: '#FFF',
-                allowFullScreen: true,
-                allowScriptAccess: 'always',
-                wmode: 'transparent'
-            };
-            CKobject.embedSWF('player/ckplayer/ckplayer.swf', 'player', 'ckplayer_a1', '100%', '100%', flashvars, params);
-            $(".living-top .tit").text(data.title);
+
+    layui.use(['layer', 'element', 'laypage'], function () {
+        var layer = layui.layer
+            , form = layui.form
+            , element = layui.element;
+
+        $.post(commonUrl + 'liveinfo/get/intercalate', {}, function (data) {
+            if (data.success) {
+                var data = data.data;
+                var flashvars = {
+                    f: data.stream1.lsspublishUrl,
+                    c: 0,
+                    b: 1,
+                    p: 1,
+                    lv: 1
+                };
+                var params = {
+                    bgcolor: '#FFF',
+                    allowFullScreen: true,
+                    allowScriptAccess: 'always',
+                    wmode: 'transparent'
+                };
+                CKobject.embedSWF('player/ckplayer/ckplayer.swf', 'player', 'ckplayer_a1', '100%', '100%', flashvars, params);
+                $(".living-top .tit").text(data.title);
 //                $(".followers").text(data.follownum);
-            $(".living-roomid").text('房间' + data.roomId);
+                $(".living-roomid").text('房间' + data.roomId);
 //                $(".ib .nickname").text(data.nickname);
-            $(".living-top .avatar img").attr("src", data.headImg);
+                $(".living-top .avatar img").attr("src", data.headImg);
 
-            $("#sendBtn").click(function () {
-                SendMsg(data.id, $("#msg-input"));
-            });
+                $("#sendBtn").click(function () {
+                    SendMsg(data.id, $("#msg-input"));
+                });
 
-            var url = commonUrl + "jgstomp";
-            var sock = new SockJS(url);
+                var url = commonUrl + "jgstomp";
+                var sock = new SockJS(url);
 
-            var stomp = Stomp.over(sock);
+                var stomp = Stomp.over(sock);
 
-            var payload = JSON.stringify({"message": "marco!"});
+                var payload = JSON.stringify({"message": "marco!"});
 
-            stomp.connect("guest", "guest", function (frame) {
+                stomp.connect("guest", "guest", function (frame) {
 
-                stomp.subscribe("/topic/" + data.roomId, handsp);
+                    stomp.subscribe("/topic/" + data.roomId, handsp);
 
-            });
-            var date = new Date();
-            var hour = '0' + date.getHours();
-            hour = hour.substr(hour.length - 2, hour.length);
-            var minutes = '0' + date.getMinutes();
-            minutes = minutes.substr(minutes.length - 2, minutes.length);
-            var second = '0' + date.getSeconds();
-            second = second.substr(second.length - 2, second.length);
-            var month = '0' + (parseInt(date.getMonth()) + 1);
-            month = month.substr(second.length - 2, second.length);
-            var day = '0' + date.getDate();
-            day = day.substr(second.length - 2, second.length);
-            var now = date.getFullYear() + '-' + month + '-' + day + ' ' + hour + ':' + minutes + ':' + second;
-            var discuss_msglist = document.querySelector(".discuss-msglist");
+                });
+                var date = new Date();
+                var hour = '0' + date.getHours();
+                hour = hour.substr(hour.length - 2, hour.length);
+                var minutes = '0' + date.getMinutes();
+                minutes = minutes.substr(minutes.length - 2, minutes.length);
+                var second = '0' + date.getSeconds();
+                second = second.substr(second.length - 2, second.length);
+                var month = '0' + (parseInt(date.getMonth()) + 1);
+                month = month.substr(second.length - 2, second.length);
+                var day = '0' + date.getDate();
+                day = day.substr(second.length - 2, second.length);
+                var now = date.getFullYear() + '-' + month + '-' + day + ' ' + hour + ':' + minutes + ':' + second;
+                var discuss_msglist = document.querySelector(".discuss-msglist");
 
-            $.post(commonUrl + 'chat/list?infoId=' + data.id + '&time=' + now + '&startNum=0&perNum=20', {}, function (json) {
-                if (json.success) {
-                    var historylist = json.data.list;
-                    historylist.reverse();
-                    historylist.forEach(function (t) {
-                        var msg_item = appendMsg(t.sendBody.nickname, t.sendBody.chatBody);
-                        discuss_msglist.appendChild(msg_item);
-                    });
-                } else {
-                    layer.msg(json.msg);
+                $.post(commonUrl + 'chat/list?infoId=' + data.id + '&time=' + now + '&startNum=0&perNum=20', {}, function (json) {
+                    if (json.success) {
+                        var historylist = json.data.list;
+                        historylist.reverse();
+                        historylist.forEach(function (t) {
+                            var msg_item = appendMsg(t.sendBody.nickname, t.sendBody.chatBody);
+                            discuss_msglist.appendChild(msg_item);
+                        });
+                    } else {
+                        layer.msg(json.msg);
+                    }
+                }, 'json')
+
+                function handsp(incomng) {
+                    var spo = JSON.parse(incomng.body);
+
+                    var msg_item = appendMsg(spo.nickname, spo.chatBody);
+
+                    discuss_msglist.appendChild(msg_item);
+                    var msglist = document.querySelectorAll(".msg-item")
+                    msglist[msglist.length - 1].scrollIntoView()
+                    console.log(spo);
                 }
-            }, 'json')
 
-            function handsp(incomng) {
-                var spo = JSON.parse(incomng.body);
-
-                var msg_item = appendMsg(spo.nickname, spo.chatBody);
-
-                discuss_msglist.appendChild(msg_item);
-                var msglist = document.querySelectorAll(".msg-item")
-                msglist[msglist.length - 1].scrollIntoView()
-                console.log(spo);
+            } else {
+                layer.msg(data.msg);
             }
-
-        } else {
-            layer.msg(data.msg);
-        }
-    }, 'json');
+        }, 'json');
+    })
 
 
 </script>

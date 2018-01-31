@@ -105,7 +105,7 @@ window.onload = function () {
             }
 
             var isstartliving_screen = false;
-            //开启直播
+            //开启屏幕直播
             if (document.getElementById("startscreenliving")) {
                 document.getElementById("startscreenliving").onclick = function () {
                     //设置参数
