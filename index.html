@@ -149,7 +149,7 @@
                 perNum: perNum,
                 branchId: branchId,
                 hasChildren: true,
-//                openLive: true,
+                openLive: true,
                 searchWord: searchWord
             }, function (data) {
                 if (data.success) {
@@ -173,7 +173,7 @@
                                 '                                </div>\n' +
                                 '                            </div>\n' +
                                 '                        </a>');
-                        })
+                        });
 
                         $(".video-item[data-url]").bind("click", function() {
                             var _this = $(this);

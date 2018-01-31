@@ -151,7 +151,8 @@ html, body {
     width: 15%;
     padding: 30px 0 0 0;
     height: 100%;
-    background-color: #F0F0F0
+    background-color: #F0F0F0;
+    overflow: auto;
 }
 
 .classlist-wrapper .tit {
@@ -699,6 +700,7 @@ html, body {
 
 .discuss-pannel {
     margin-top: 10px;
+    display: flex;
 }
 
 .discuss-wrapper .nickname {
@@ -748,7 +750,8 @@ html, body {
 }
 
 .living-room #msg-input {
-    background-color: #F0F0F0
+    background-color: #F0F0F0;
+    margin-right: 5px;
 }
 
 .living-room .discuss-wrapper {
@@ -852,11 +855,12 @@ html, body {
 }
 
 .layui-tree li ul{
-    /*margin-left: 0;*/
+    margin-left: 20px;
 }
 
 .layui-tree li{
     /*display: flex;*/
+    overflow: visible;
 }
 
 #classlist a cite{

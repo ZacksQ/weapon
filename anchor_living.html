@@ -42,7 +42,9 @@
                     <div class="ctrl fr">
                         <span id="startliving"><i class="layui-icon">&#xe652;</i>开始摄像直播</span>
                         <span id="startscreenliving"><i class="layui-icon">&#xe652;</i>开始屏幕直播</span>
+                        <span id="startotherliving"><i class="layui-icon">&#xe652;</i>开始其他直播</span>
                         <span id="videorecord"><i class="layui-icon">&#xe6ed;</i>视频录制</span>
+                        <span id="timetext"></span>
                         <span id="mute"><i class="layui-icon">&#xe6fc;</i>麦克风</span>
                         <!--<span><i class="layui-icon">&#xe645;</i>声音</span>-->
                         <span id="switchcamera"><i class="layui-icon">&#xe660;</i>切换摄像头</span>
@@ -60,17 +62,17 @@
         <div class="hidediscuss">》</div>
         <div class="discuss-msglist">
             <!--<div class="msg-item msg-sys">-->
-                <!--一连三班进入直播室-->
+            <!--一连三班进入直播室-->
             <!--</div>-->
             <!--<div class="msg-item">-->
-                <!--<span class="nickname">刘昴星：</span><span class="msg-content">-->
-                    <!--这是什么型号的这是什么型号的这是什么型号的这是什么型号的这是什么型号的这是什么型号的-->
-                <!--</span>-->
+            <!--<span class="nickname">刘昴星：</span><span class="msg-content">-->
+            <!--这是什么型号的这是什么型号的这是什么型号的这是什么型号的这是什么型号的这是什么型号的-->
+            <!--</span>-->
             <!--</div>-->
             <!--<div class="msg-item ancthor">-->
-                <!--<span class="nickname">刘昴星：</span><span class="msg-content">-->
-                    <!--这是什么型号的-->
-                <!--</span>-->
+            <!--<span class="nickname">刘昴星：</span><span class="msg-content">-->
+            <!--这是什么型号的-->
+            <!--</span>-->
             <!--</div>-->
         </div>
         <div class="discuss-pannel">
@@ -78,109 +80,107 @@
             <button class="layui-btn layui-btn-normal layui-btn-sm" id="sendBtn">发送</button>
         </div>
     </div>
+</div>
+<script src="js/jquery.min.js"></script>
+<script src="layui/layui.js"></script>
+<script src="js/common.js"></script>
+<script src="player/ckplayer/ckplayer.js" charset="utf-8"></script>
+<script src="js/sockjs-0.3.4.js"></script>
+<script src="js/stomp.js"></script>
+<script src="js/qwebchannel.js"></script>
+<script src="js/connect.js"></script>
+<script>
+    $(".hidediscuss").click(function () {
+        if (parseInt($(".discuss-wrapper").css("width")) !== 0) {
+            $(".discuss-wrapper").css({"width": "0", "padding": "20px 0"})
+        } else {
+            $(".discuss-wrapper").css({"width": "30%", "padding": "20px 30px"})
+        }
 
-    <script src="js/jquery.min.js"></script>
-    <script src="layui/layui.js"></script>
-    <script src="js/common.js"></script>
-    <script src="player/ckplayer/ckplayer.js" charset="utf-8"></script>
-    <script src="js/sockjs-0.3.4.js"></script>
-    <script src="js/stomp.js"></script>
-    <script src="js/qwebchannel.js"></script>
-    <script src="js/connect.js"></script>
-    <script>
-
-        $(".hidediscuss").click(function () {
-            if(parseInt($(".discuss-wrapper").css("width")) !== 0){
-                $(".discuss-wrapper").css({"width": "0", "padding": "20px 0"})
-            }else{
-                $(".discuss-wrapper").css({"width": "30%", "padding": "20px 30px"})
-            }
-
-        })
-        $.post(commonUrl + 'liveinfo/get/intercalate', {}, function (data) {
-            if (data.success) {
-                var data = data.data;
-                var flashvars = {
-                    f: data.stream1.lsspublishUrl,
-                    c: 0,
-                    b: 1,
-                    p: 1,
-                    lv: 1
-                };
-                var params = {
-                    bgcolor: '#FFF',
-                    allowFullScreen: true,
-                    allowScriptAccess: 'always',
-                    wmode: 'transparent'
-                };
-                CKobject.embedSWF('player/ckplayer/ckplayer.swf', 'player', 'ckplayer_a1', '100%', '100%', flashvars, params);
-                $(".living-top .tit").text(data.title);
+    })
+    $.post(commonUrl + 'liveinfo/get/intercalate', {}, function (data) {
+        if (data.success) {
+            var data = data.data;
+            var flashvars = {
+                f: data.stream1.lsspublishUrl,
+                c: 0,
+                b: 1,
+                p: 1,
+                lv: 1
+            };
+            var params = {
+                bgcolor: '#FFF',
+                allowFullScreen: true,
+                allowScriptAccess: 'always',
+                wmode: 'transparent'
+            };
+            CKobject.embedSWF('player/ckplayer/ckplayer.swf', 'player', 'ckplayer_a1', '100%', '100%', flashvars, params);
+            $(".living-top .tit").text(data.title);
 //                $(".followers").text(data.follownum);
-                $(".living-roomid").text('房间' + data.roomId);
+            $(".living-roomid").text('房间' + data.roomId);
 //                $(".ib .nickname").text(data.nickname);
-                $(".living-top .avatar img").attr("src", data.headImg);
+            $(".living-top .avatar img").attr("src", data.headImg);
 
-                $("#sendBtn").click(function () {
-                    SendMsg(data.id, $("#msg-input"));
-                });
+            $("#sendBtn").click(function () {
+                SendMsg(data.id, $("#msg-input"));
+            });
 
-                var url = commonUrl + "jgstomp";
-                var sock = new SockJS(url);
+            var url = commonUrl + "jgstomp";
+            var sock = new SockJS(url);
 
-                var stomp = Stomp.over(sock);
+            var stomp = Stomp.over(sock);
 
-                var payload = JSON.stringify({"message":"marco!"});
+            var payload = JSON.stringify({"message": "marco!"});
 
-                stomp.connect("guest","guest", function(frame){
+            stomp.connect("guest", "guest", function (frame) {
 
-                    stomp.subscribe("/topic/" + data.roomId, handsp);
+                stomp.subscribe("/topic/" + data.roomId, handsp);
 
-                });
-                var date = new Date();
-                var hour = '0' + date.getHours();
-                    hour = hour.substr(hour.length-2, hour.length);
-                var minutes = '0' + date.getMinutes();
-                minutes = minutes.substr(minutes.length-2, minutes.length);
-                var second = '0' + date.getSeconds();
-                second = second.substr(second.length-2, second.length);
-                var month = '0' + (parseInt(date.getMonth()) + 1);
-                month = month.substr(second.length-2, second.length);
-                var day = '0' + date.getDate();
-                day = day.substr(second.length-2, second.length);
-                var now = date.getFullYear() + '-' + month + '-' + day + ' ' + hour + ':' + minutes + ':' + second;
-                var discuss_msglist = document.querySelector(".discuss-msglist");
+            });
+            var date = new Date();
+            var hour = '0' + date.getHours();
+            hour = hour.substr(hour.length - 2, hour.length);
+            var minutes = '0' + date.getMinutes();
+            minutes = minutes.substr(minutes.length - 2, minutes.length);
+            var second = '0' + date.getSeconds();
+            second = second.substr(second.length - 2, second.length);
+            var month = '0' + (parseInt(date.getMonth()) + 1);
+            month = month.substr(second.length - 2, second.length);
+            var day = '0' + date.getDate();
+            day = day.substr(second.length - 2, second.length);
+            var now = date.getFullYear() + '-' + month + '-' + day + ' ' + hour + ':' + minutes + ':' + second;
+            var discuss_msglist = document.querySelector(".discuss-msglist");
 
-                $.post(commonUrl + 'chat/list?infoId=' + data.id +'&time=' + now +'&startNum=0&perNum=20', {}, function (json) {
-                    if(json.success){
-                        var historylist = json.data.list;
-                        historylist.reverse();
-                        historylist.forEach(function (t) {
-                            var msg_item = appendMsg(t.sendBody.nickname, t.sendBody.chatBody);
-                            discuss_msglist.appendChild(msg_item);
-                        });
-                    }else{
-                        layer.msg(json.msg);
-                    }
-                }, 'json')
-
-                function handsp(incomng) {
-                    var spo = JSON.parse(incomng.body);
-
-                    var msg_item = appendMsg(spo.nickname, spo.chatBody);
-
-                    discuss_msglist.appendChild(msg_item);
-                    var msglist = document.querySelectorAll(".msg-item")
-                    msglist[msglist.length -1].scrollIntoView()
-                    console.log(spo);
+            $.post(commonUrl + 'chat/list?infoId=' + data.id + '&time=' + now + '&startNum=0&perNum=20', {}, function (json) {
+                if (json.success) {
+                    var historylist = json.data.list;
+                    historylist.reverse();
+                    historylist.forEach(function (t) {
+                        var msg_item = appendMsg(t.sendBody.nickname, t.sendBody.chatBody);
+                        discuss_msglist.appendChild(msg_item);
+                    });
+                } else {
+                    layer.msg(json.msg);
                 }
+            }, 'json')
 
-            } else {
-                layer.msg(data.msg);
+            function handsp(incomng) {
+                var spo = JSON.parse(incomng.body);
+
+                var msg_item = appendMsg(spo.nickname, spo.chatBody);
+
+                discuss_msglist.appendChild(msg_item);
+                var msglist = document.querySelectorAll(".msg-item")
+                msglist[msglist.length - 1].scrollIntoView()
+                console.log(spo);
             }
-        }, 'json');
+
+        } else {
+            layer.msg(data.msg);
+        }
+    }, 'json');
 
 
-
-    </script>
+</script>
 </body>
 </html>

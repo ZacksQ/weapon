@@ -3,6 +3,43 @@ function output(message) {
     // output.innerHTML = output.innerHTML + message + "\n";
 }
 
+var h, m, s;//时 分 秒
+h = m = s = 0;//初始化
+var ms = 0;//毫秒
+var int;//定时器
+
+function Reset()//重置
+{
+    window.clearInterval(int);
+    ms = h = m = s = 0;
+    document.getElementById('timetext').value = '00:00.00';
+}
+
+function start()//开始
+{
+    int = setInterval(timer, 10);
+
+}
+
+function two_char(n) {
+    return n >= 10 ? n : "0" + n;
+}
+
+function timer()//计时
+{
+    ms = ms + 10;
+    if (ms >= 1000) {
+        ms = 0;
+        s = s + 1;
+    }
+    if (s >= 60) {
+        s = 0;
+        m = m + 1;
+    }
+    document.getElementById('timetext').value = two_char(m) + ':' + two_char(s) + '.' + ms / 10;
+}
+
+
 window.onload = function () {
     // if (location.search != "")
     //     var baseUrl = (/[?&]webChannelBaseUrl=([A-Za-z0-9\-:/\.]+)/.exec(location.search)[1]);
@@ -48,6 +85,7 @@ window.onload = function () {
                         $.post(commonUrl + 'liveinfo/get/intercalate', {}, function (data) {
                             if (data.success) {
                                 var data = data.data;
+                                data.livingType = 0;
                                 core.receiveStartStream(JSON.stringify(data));
                                 document.getElementById("startliving").innerHTML = '<i class="layui-icon">&#xe652;</i>结束摄像直播';
                                 // console.log("success:开启直播")
@@ -61,6 +99,31 @@ window.onload = function () {
                     } else {
                         isstartliving = false;
                         document.getElementById("startliving").innerHTML = '<i class="layui-icon">&#xe652;</i>开启摄像直播';
+                        core.receiveStopStream();
+                    }
+                }
+            }
+
+            var isstartliving_screen = false;
+            //开启直播
+            if (document.getElementById("startscreenliving")) {
+                document.getElementById("startscreenliving").onclick = function () {
+                    //设置参数
+                    if (isstartliving_screen === false) {
+                        $.post(commonUrl + 'liveinfo/get/intercalate', {}, function (data) {
+                            if (data.success) {
+                                var data = data.data;
+                                data.livingType = 1;
+                                core.receiveStartStream(JSON.stringify(data));
+                                document.getElementById("startscreenliving").innerHTML = '<i class="layui-icon">&#xe652;</i>结束屏幕直播';
+                                isstartliving_screen = true;
+                            } else {
+                                console.log(data.msg);
+                            }
+                        }, 'json');
+                    } else {
+                        isstartliving_screen = false;
+                        document.getElementById("startscreenliving").innerHTML = '<i class="layui-icon">&#xe652;</i>开启屏幕直播';
                         core.receiveStopStream();
                     }
                 }
@@ -96,10 +159,12 @@ window.onload = function () {
                         var text = "videorecord"
                         core.receiveStartRecord(text);
                         isrecording = true;
+                        start();
                         document.getElementById("videorecord").innerHTML = '<i class="layui-icon">&#xe6ed;</i>停止录制';
-                    }else{
+                    } else {
                         core.receiveStopRecord();
                         isrecording = false;
+                        Reset();
                         document.getElementById("videorecord").innerHTML = '<i class="layui-icon">&#xe6ed;</i>开始录制';
                     }
                 }
@@ -117,11 +182,11 @@ window.onload = function () {
             var ismute = false;
             if (document.getElementById("mute")) {
                 document.getElementById("mute").onclick = function () {
-                    if(ismute === false){
+                    if (ismute === false) {
                         ismute = true;
 
                         document.getElementById("mute").innerHTML = '<i class="layui-icon" style="text-decoration: line-through;">&#xe6fc;</i>麦克风';
-                    }else{
+                    } else {
                         ismute = false;
                         document.getElementById("mute").innerHTML = '<i class="layui-icon">&#xe6fc;</i>麦克风';
                     }
