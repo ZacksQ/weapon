@@ -12,7 +12,7 @@ function Reset()//重置
 {
     window.clearInterval(int);
     ms = h = m = s = 0;
-    document.getElementById('timetext').value = '00:00.00';
+    document.getElementById('timetext').innerText = '00:00.00';
 }
 
 function start()//开始
@@ -36,7 +36,7 @@ function timer()//计时
         s = 0;
         m = m + 1;
     }
-    document.getElementById('timetext').value = two_char(m) + ':' + two_char(s) + '.' + ms / 10;
+    document.getElementById('timetext').innerText = two_char(m) + ':' + two_char(s) + '.' + two_char(ms / 10);
 }
 
 
@@ -86,10 +86,17 @@ window.onload = function () {
                             if (data.success) {
                                 var data = data.data;
                                 data.livingType = 0;
-                                core.receiveStartStream(JSON.stringify(data));
-                                document.getElementById("startliving").innerHTML = '<i class="layui-icon">&#xe652;</i>结束摄像直播';
-                                // console.log("success:开启直播")
-                                isstartliving = true;
+                                $.post(commonUrl + 'liveinfo/liveControl', {
+                                    type: 1
+                                }, function (json) {
+                                    if(json.success==true){
+
+                                        core.receiveStartStream(JSON.stringify(data));
+                                        document.getElementById("startliving").innerHTML = '<i class="layui-icon">&#xe652;</i>结束摄像直播';
+                                        // console.log("success:开启直播")
+                                        isstartliving = true;
+                                    }
+                                }, 'json')
                             } else {
                                 console.log(data.msg);
                             }
@@ -97,9 +104,16 @@ window.onload = function () {
                         // core.receiveStartStream("字符串");
                         // core.receiveStartStream('开启');
                     } else {
-                        isstartliving = false;
-                        document.getElementById("startliving").innerHTML = '<i class="layui-icon">&#xe652;</i>开启摄像直播';
-                        core.receiveStopStream();
+                        $.post(commonUrl + 'liveinfo/liveControl', {
+                            type: 2
+                        }, function (json) {
+                            if(json.success==true){
+                                isstartliving = false;
+                                document.getElementById("startliving").innerHTML = '<i class="layui-icon">&#xe652;</i>开启摄像直播';
+                                core.receiveStopStream();
+                            }
+                        }, 'json')
+
                     }
                 }
             }

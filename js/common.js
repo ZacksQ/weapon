@@ -112,6 +112,9 @@ function SendMsg(roomId, input) {
 }
 
 function appendMsg(nicknametxt, contentext) {
+    if(nicknametxt === undefined){
+        return false
+    }
     var msg_item = document.createElement("div"),
         nickname = document.createElement("span"),
         msg_content = document.createElement("span");
@@ -126,6 +129,9 @@ function appendMsg(nicknametxt, contentext) {
 }
 
 function sendSysMsg(contentext) {
+    // if(nicknametxt === undefined){
+    //     return false
+    // }
     var msg_item = document.createElement("div"),
         msg_content = document.createElement("span");
     msg_item.setAttribute("class", 'msg-item msg-sys');
@@ -133,4 +139,15 @@ function sendSysMsg(contentext) {
     msg_content.appendChild(document.createTextNode(contentext));
     msg_item.appendChild(msg_content);
     return msg_item;
+}
+
+function ext(filename){
+    if(filename === null){ return false }
+    var ext = null;
+    var name = filename.toLowerCase();
+    var i = name.lastIndexOf(".");
+    if(i > -1){
+        var ext = name.substring(i);
+    }
+    return ext;
 }

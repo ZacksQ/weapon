@@ -193,15 +193,32 @@
                                 content: '<div id="iip"></div>'
                             });
 
-                            var flashvars={
-                                a: _this.parent().attr("data-url"),
-                                f:'player/m3u8.swf',
-                                c:0,
-                                s:4
-                            };
-                            var video=[_this.parent().attr("data-url")];
-                            var params={bgcolor:'#FFF',allowFullScreen:true,allowScriptAccess:'always',wmode:'transparent'};
-                            CKobject.embed('player/ckplayer/ckplayer.swf','iip','ckplayer_a1','100%','360px',false,flashvars,video,params);
+                            if(ext(_this.parent().attr("data-url")) !== '.flv') {
+                                var flashvars = {
+                                    a: _this.parent().attr("data-url"),
+                                    f: 'player/m3u8.swf',
+                                    c: 0,
+                                    s: 4
+                                };
+                                var video = [_this.parent().attr("data-url")];
+                                var params = {
+                                    bgcolor: '#FFF',
+                                    allowFullScreen: true,
+                                    allowScriptAccess: 'always',
+                                    wmode: 'transparent'
+                                };
+                                CKobject.embed('player/ckplayer/ckplayer.swf', 'iip', 'ckplayer_a1', '100%', '360px', false, flashvars, video, params);
+                            }else{
+                                var flashvars={
+                                    // f:'http://movie.ks.js.cn/flv/other/1_0.flv',
+                                    f:_this.parent().attr("data-url"),
+                                    c:0,
+                                    b:1
+                                };
+                                var params={bgcolor:'#FFF',allowFullScreen:true,allowScriptAccess:'always',wmode:'transparent'};
+                                CKobject.embedSWF('player/ckplayer/ckplayer.swf','iip','ckplayer_a1','100%','360px',flashvars,params);
+
+                            }
                         });
 
                         var laypage = layui.laypage;

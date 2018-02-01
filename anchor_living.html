@@ -41,13 +41,14 @@
                     <span class="living-roomid">房间</span>
                     <div class="ctrl fr">
                         <span id="startliving"><i class="layui-icon">&#xe652;</i>开始摄像直播</span>
-                        <span id="startscreenliving"><i class="layui-icon">&#xe652;</i>开始屏幕直播</span>
+                        <!--<span id="startscreenliving"><i class="layui-icon">&#xe652;</i>开始屏幕直播</span>-->
                         <span id="startotherliving"><i class="layui-icon">&#xe652;</i>开始其他直播</span>
                         <span id="videorecord"><i class="layui-icon">&#xe6ed;</i>视频录制</span>
                         <span id="timetext"></span>
                         <span id="mute"><i class="layui-icon">&#xe6fc;</i>麦克风</span>
                         <!--<span><i class="layui-icon">&#xe645;</i>声音</span>-->
                         <span id="switchcamera"><i class="layui-icon">&#xe660;</i>切换摄像头</span>
+                        <span id="pushurl"><i class="layui-icon">&#xe620;</i>查看推流地址</span>
                     </div>
                 </div>
             </div>
@@ -88,7 +89,7 @@
 <script src="js/sockjs-0.3.4.js"></script>
 <script src="js/stomp.js"></script>
 <script src="js/qwebchannel.js"></script>
-<script src="js/connect.js"></script>
+<script src="js/connect.js?v=2"></script>
 <script>
     $(".hidediscuss").click(function () {
         if (parseInt($(".discuss-wrapper").css("width")) !== 0) {
@@ -96,7 +97,6 @@
         } else {
             $(".discuss-wrapper").css({"width": "30%", "padding": "20px 30px"})
         }
-
     })
 
     layui.use(['layer', 'element', 'laypage'], function () {
@@ -131,6 +131,15 @@
                     SendMsg(data.id, $("#msg-input"));
                 });
 
+                document.onkeydown = function(event){                //网页内按下回车触发
+                    if(event.keyCode==13)
+                    {
+//                        document.getElementById("Button").click();
+                        SendMsg(data.id, $("#msg-input"));
+                        return false;
+                    }
+                };
+
                 var url = commonUrl + "jgstomp";
                 var sock = new SockJS(url);
 
@@ -157,13 +166,28 @@
                 var now = date.getFullYear() + '-' + month + '-' + day + ' ' + hour + ':' + minutes + ':' + second;
                 var discuss_msglist = document.querySelector(".discuss-msglist");
 
+                $("#pushurl").click(function () {
+                    layer.open({
+                        area: ['500px','500px'],
+                        content: '<img src="' + commonUrl + 'makeQrcode?content=' + data.stream1.lsspublishUrl + '" style="width:200px; margin:0 auto; display: block" /><br>推流地址：' + data.stream1.lsspublishUrl
+                        ,btn: ['确定']
+                        ,yes: function(index, layero){
+                            //按钮【按钮一】的回调
+                            layer.close(index)
+                        }
+
+                    });
+                })
+
                 $.post(commonUrl + 'chat/list?infoId=' + data.id + '&time=' + now + '&startNum=0&perNum=20', {}, function (json) {
                     if (json.success) {
                         var historylist = json.data.list;
                         historylist.reverse();
                         historylist.forEach(function (t) {
                             var msg_item = appendMsg(t.sendBody.nickname, t.sendBody.chatBody);
-                            discuss_msglist.appendChild(msg_item);
+                            if(msg_item){
+                                discuss_msglist.appendChild(msg_item);
+                            }
                         });
                     } else {
                         layer.msg(json.msg);
@@ -174,10 +198,11 @@
                     var spo = JSON.parse(incomng.body);
 
                     var msg_item = appendMsg(spo.nickname, spo.chatBody);
-
-                    discuss_msglist.appendChild(msg_item);
-                    var msglist = document.querySelectorAll(".msg-item")
-                    msglist[msglist.length - 1].scrollIntoView()
+                    if(msg_item){
+                        discuss_msglist.appendChild(msg_item);
+                        var msglist = document.querySelectorAll(".msg-item")
+                        msglist[msglist.length - 1].scrollIntoView()
+                    }
                     console.log(spo);
                 }
 
@@ -185,6 +210,32 @@
                 layer.msg(data.msg);
             }
         }, 'json');
+
+        var startotherliving = false;
+
+        $("#startotherliving").click(function () {
+            if(startotherliving === false){
+                $.post(commonUrl + 'liveinfo/liveControl', {
+                    type: 1
+                }, function (json) {
+                    if(json.success==true){
+                        startotherliving = true;
+                        $("#startotherliving").html('<i class="layui-icon">&#xe652;</i>结束其他直播');
+                    }
+                }, 'json')
+            }else{
+                $.post(commonUrl + 'liveinfo/liveControl', {
+                    type: 2
+                }, function (json) {
+                    if(json.success==true){
+                        startotherliving = false;
+                        $("#startotherliving").html('<i class="layui-icon">&#xe652;</i>开始其他直播');
+                    }
+                }, 'json')
+            }
+        });
+
+
     })
 
 

@@ -766,14 +766,15 @@ html, body {
 .living-room .add-wrapper {
     height: 40%;
     display: flex;
-    justify-content: space-between;
+    /*justify-content: space-between;*/
     flex-wrap: wrap;
     padding: 5px 0;
 }
 
 .add-wrapper .add-item {
     background-color: #F0F0F0;
-    width: 48%;
+    /*width: 48%;*/
+    width: 100%;
     height: 48%;
     position: relative;
     cursor: pointer;
@@ -886,4 +887,42 @@ html, body {
     margin-left: 8px;
     font-size: 20px;
     /*display: none !important;*/
+}
+
+.leftadl{
+    position: absolute;
+    width: 26px;
+    height: 26px;
+    border-radius: 26px;
+    background-color: #F0F0F0;
+    border: 2px solid #A5A5A2;
+    text-align: center;
+    line-height: 19px;
+    top: -7px;
+    left: -10px;
+    cursor: pointer;
+}
+
+.leftadl:after {
+    content: '+';
+    font-size: 22px;
+    color: #a5a5a2;
+}
+
+.layui-badge{
+    border-radius: 20px;
+    width: 18px;
+    padding: 0;
+}
+
+@keyframes blink {
+    from{
+        opacity: 1;
+    }
+    to{
+        opacity: 0;
+    }
+}
+.video-item .living-label{
+    animation: blink 1s ease infinite;
 }

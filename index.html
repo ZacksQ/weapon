@@ -82,7 +82,7 @@
     <div class="layui-clear"></div>
 </div>
 <script src="js/jquery.min.js"></script>
-<script src="layui/layui.js"></script>
+<script src="layui/layui.js?v=3"></script>
 <script src="js/common.js"></script>
 <script src="player/ckplayer/ckplayer.js" charset="utf-8"></script>
 <script>
@@ -99,21 +99,22 @@
 //                "LoginUserId_": userid
 //            },
             success: function (data) {
-            if (data.success) {
-                var treedata = data.data.list;
-                layui.tree({
-                    elem: "#classlist"
-                    , nodes: treedata
-                    , click: function (node) {
+                if (data.success) {
+                    var treedata = data.data.list;
+                    layui.tree({
+                        elem: "#classlist"
+                        , nodes: treedata
+                        , click: function (node) {
 //                        console.log(node)
-                        getlist(0, 8, 1, node.id);
-                        getlist(0, 8, 2, node.id);
-                    }
-                })
-            } else {
-                layer.msg(data.msg);
+                            getlist(0, 8, 1, node.id);
+                            getlist(0, 8, 2, node.id);
+                        }
+                    })
+                } else {
+                    layer.msg(data.msg);
+                }
             }
-        }});
+        });
 
         getlist(0, 8, 1);
         getlist(0, 8, 2);
@@ -160,38 +161,54 @@
 //                            if(type == 1){
 //                                eleobj.url = eleobj.url + '?id=' + element.id;
 //                            }
-                            $("#" + eleobj.wrapper).prepend('<a href="' + (type === 1?eleobj.url + '?id=' + element.id: eleobj.url) + '" ' + (type!=1?'data-url="' + element.url + '"':'') +' class="video-item">\n' +
+                            $("#" + eleobj.wrapper).prepend('<a href="' + (type === 1 ? eleobj.url + '?id=' + element.id : eleobj.url) + '" ' + (type != 1 ? 'data-url="' + element.url + '"' : '') + ' class="video-item">\n' +
                                 '                            <div class="cover" style="background-image: url(' + element.coverImg + ')">\n' +
                                 '                            </div>\n' +
                                 '                            <div class="bt">\n' +
                                 '                                <img src="' + element.headImg + '" class="avatar" alt="">\n' +
                                 '                                <div class="des fl">' +
 
-                                '                                    <div class="tit">' + element.title + (element.liveStatus === 3?'<span class="living-label xs">直播中</span>':'') + '</div>\n' +
-                                '<div style="font-size: 12px">' + element.nickname +'</div> '+
+                                '                                    <div class="tit">' + element.title + (element.liveStatus === 3 ? '<span class="living-label xs">直播中</span>' : '') + '</div>\n' +
+                                '<div style="font-size: 12px">' + element.nickname + '</div> ' +
                                 '                                    <p class="location">' + element.bewrite + '</p>\n' +
                                 '                                </div>\n' +
                                 '                            </div>\n' +
                                 '                        </a>');
                         });
 
-                        $(".video-item[data-url]").bind("click", function() {
+                        $(".video-item[data-url]").bind("click", function () {
                             var _this = $(this);
                             layer.open({
-                                area: ['600px','500px'],
+                                area: ['600px', '500px'],
                                 title: '视频播放',
                                 content: '<div id="iip"></div>'
                             });
+                            if (ext(_this.attr("data-url")) !== '.flv') {
+                                var flashvars = {
+                                    a: _this.attr("data-url"),
+                                    f: 'player/m3u8.swf',
+                                    c: 0,
+                                    s: 4
+                                };
+                                var video = [_this.attr("data-url")];
+                                var params = {
+                                    bgcolor: '#FFF',
+                                    allowFullScreen: true,
+                                    allowScriptAccess: 'always',
+                                    wmode: 'transparent'
+                                };
+                                CKobject.embed('player/ckplayer/ckplayer.swf', 'iip', 'ckplayer_a1', '100%', '360px', false, flashvars, video, params);
+                            } else {
+                                var flashvars={
+                                    // f:'http://movie.ks.js.cn/flv/other/1_0.flv',
+                                    f:_this.attr("data-url"),
+                                    c:0,
+                                    b:1
+                                };
+                                var params={bgcolor:'#FFF',allowFullScreen:true,allowScriptAccess:'always',wmode:'transparent'};
+                                CKobject.embedSWF('player/ckplayer/ckplayer.swf','iip','ckplayer_a1','100%','360px',flashvars,params);
 
-                            var flashvars={
-                                a: _this.attr("data-url"),
-                                f:'player/m3u8.swf',
-                                c:0,
-                                s:4
-                            };
-                            var video=[_this.attr("data-url")];
-                            var params={bgcolor:'#FFF',allowFullScreen:true,allowScriptAccess:'always',wmode:'transparent'};
-                            CKobject.embed('player/ckplayer/ckplayer.swf','iip','ckplayer_a1','100%','360px',false,flashvars,video,params);
+                            }
                         });
 
                         var laypage = layui.laypage;
@@ -215,7 +232,7 @@
                                 }
                             }
                         });
-                    }else{
+                    } else {
                         $("#" + eleobj.wrapper).html("暂无数据")
                     }
                 } else {
